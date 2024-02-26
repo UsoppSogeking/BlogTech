@@ -1,0 +1,148 @@
+/* Perfil.css */
+
+.perfil {
+    background-color: #e4ebf0;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+}
+
+.user-img {
+    text-align: center;
+}
+
+.user-img img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    margin-bottom: 20px;
+}
+
+.user-datas {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.user-datas h3 {
+    color: #4180ab;
+    font-size: 24px;
+    margin-bottom: 10px;
+}
+
+.file-input-container input[type="file"] {
+    display: none;
+}
+
+.file-input-container label {
+    display: inline-block;
+    background-color: #4180ab;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.file-input-container label:hover {
+    background-color: #336699;
+}
+
+.user-bio {
+    margin-top: 20px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    padding: 15px;
+    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
+}
+
+.bio-container label, 
+.interests-container label {
+    display: block;
+    text-align: left;
+}
+
+.bio-input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    color: #333;
+    font-size: 16px;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+.bio-char-counter {
+    color: #8ab3cf;
+    font-size: 14px;
+    text-align: right;
+}
+
+.save-bio-button {
+    background-color: #4180ab;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.save-bio-button:hover {
+    background-color: #336699;
+}
+
+/* Estilos para interesses */
+.interests-container {
+    margin-top: 20px;
+}
+
+.interests-input {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+    color: #333;
+    font-size: 16px;
+    resize: vertical;
+    margin-bottom: 10px;
+}
+
+.save-interests-button {
+    background-color: #4180ab;
+    color: #ffffff;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.save-interests-button:hover {
+    background-color: #336699;
+}
+
+.user-stats {
+    display: flex; /* Torna os elementos filhos flexíveis */
+    margin-top: 20px; /* Adiciona um espaço entre os interesses e as estatísticas do usuário */
+    justify-content: center;
+}
+
+.user-stats p {
+    margin-right: 20px; /* Adiciona espaçamento entre os elementos */
+}
+
+@media screen and (min-width: 768px) {
+    .user-stats {
+        margin-top: 10px; /* Reduz o espaço superior entre os elementos em telas maiores */
+    }
+
+    .user-stats p {
+        margin-right: 10px; /* Reduz o espaçamento entre os elementos em telas maiores */
+    }
+}

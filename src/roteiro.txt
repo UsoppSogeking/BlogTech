@@ -1,0 +1,70 @@
+Etapa 1: Configuração do Projeto e Interface de Usuário Básica
+Configure um novo projeto React usando Create React App.
+Instale e configure o Firebase para autenticação de usuários.
+Crie páginas para registro, login e uma página inicial.
+Adicione formulários simples para registro e login nas respectivas páginas.
+
+Etapa 2: Implementação do Registro de Usuário
+Crie uma função para registrar novos usuários usando o Firebase Authentication.
+Adicione validações básicas nos campos do formulário de registro.
+Apresente mensagens de erro caso o registro falhe.
+Após o registro bem-sucedido, redirecione o usuário para a página inicial.
+
+Etapa 3: Implementação do Login de Usuário
+Implemente a função de login de usuário usando o Firebase Authentication.
+Adicione validações básicas nos campos do formulário de login.
+Apresente mensagens de erro caso o login falhe.
+Após o login bem-sucedido, redirecione o usuário para a página inicial.
+
+Etapa 4: Implementação da Autenticação de Rotas
+Use um hook de autenticação para verificar se o usuário está autenticado em determinadas rotas protegidas.
+Redirecione o usuário para a página de login se ele tentar acessar uma rota protegida sem autenticação.
+Implemente uma página de perfil do usuário que só pode ser acessada quando o usuário está autenticado.
+
+Etapa 5: Melhorias e Polimentos
+Adicione recursos extras, como a capacidade de redefinir a senha do usuário.
+Aprimore a interface do usuário com estilos e layouts mais atraentes.
+Adicione feedback visual ao usuário durante o processo de autenticação e registro.
+Teste o aplicativo para garantir que todas as funcionalidades estejam funcionando corretamente.
+
+Bibliotecas de validação de formulario: Formik e Yup
+
+
+Registro de Usuário: Você pode usar o formulário que você criou para coletar os dados do usuário, como nome, e-mail e senha.
+
+Autenticação OAuth 2.0: Após o usuário preencher o formulário de registro, você pode usar as credenciais fornecidas para autenticar o usuário na API do Medium usando OAuth 2.0. Isso geralmente envolve enviar uma solicitação de autorização para a API do Medium e, em seguida, trocar o código de autorização por um token de acesso que será usado para fazer solicitações em nome do usuário.
+
+Envio de Dados para o Medium: Depois de autenticar o usuário com sucesso, você pode enviar os dados do usuário para o Medium, como nome, e-mail e senha, para criar uma nova conta no Medium associada ao e-mail fornecido pelo usuário.
+
+
+API de Comentários do Disqus: Permite adicionar facilmente um sistema de comentários aos posts do seu blog, onde os usuários podem interagir e discutir os tópicos abordados.
+
+Documentação
+API de Reações do Facebook: Com essa API, você pode adicionar botões de reação aos seus posts, permitindo que os leitores expressem suas emoções, como "Curtir", "Amei", "Haha", "Uau", "Triste" e "Grr".
+
+Documentação
+API do Twitter: Integrar tweets relacionados aos seus posts pode aumentar o engajamento e permitir que os leitores compartilhem facilmente o conteúdo do seu blog.
+
+Documentação
+API de Embed do YouTube: Se você planeja incorporar vídeos em seus posts, a API de Embed do YouTube permite incorporar facilmente vídeos do YouTube em seu blog.
+
+Documentação
+API de Compartilhamento Social: Existem várias APIs disponíveis que facilitam o compartilhamento de conteúdo em redes sociais como Facebook, Twitter, LinkedIn, etc. Isso permite que os leitores compartilhem seus posts favoritos com seus seguidores.
+
+Sim, é possível implementar essa funcionalidade de identificar o usuário que realizou um comentário e exibir sua foto e nome ao lado do comentário. Aqui está uma abordagem de alto nível de como você poderia fazer isso:
+
+Registro de Usuários: Primeiro, você precisa ter um sistema de registro de usuários em seu próprio banco de dados. Quando um usuário se registra em seu blog, você armazena suas informações, como nome, foto de perfil e outros dados relevantes.
+
+Integração com o Disqus: Em seguida, ao configurar a integração com o Disqus para os comentários em seu blog, você precisa garantir que os comentários estejam associados aos usuários registrados em seu banco de dados. Isso pode ser feito através da identificação única de cada usuário, como seu ID de usuário ou endereço de e-mail.
+
+Exibição das Informações do Usuário: Quando um usuário faz um comentário em seu blog e envia o comentário para o Disqus, você pode adicionar as informações do usuário (nome e foto de perfil) ao comentário antes de enviá-lo. Isso pode ser feito automaticamente pelo seu aplicativo, pegando as informações do usuário atualmente logado.
+
+Atualização das Informações do Usuário: Se um usuário fizer login com uma conta diferente em seu blog, você precisará atualizar as informações exibidas nos comentários para refletir o novo usuário logado. Isso pode ser feito verificando o usuário atualmente logado e carregando suas informações de perfil conforme necessário.
+
+Caching de Dados: Para melhorar o desempenho, você pode considerar o uso de caching para armazenar as informações do usuário atualmente logado, evitando a necessidade de buscar essas informações do banco de dados a cada vez que um comentário for carregado. Isso pode ajudar a reduzir a latência e melhorar a experiência do usuário.
+
+Com essa abordagem, você pode garantir que os comentários em seu blog sejam associados aos usuários registrados em seu banco de dados e exibir as informações do usuário ao lado de cada comentário, fornecendo uma experiência personalizada e identificável para seus usuários.
+
+
+
+

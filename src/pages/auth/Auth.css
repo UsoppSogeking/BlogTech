@@ -1,0 +1,31 @@
+.register, .login {
+    max-width: 1200px;
+    margin: 10px auto;
+    padding: 10px;
+}
+
+.register h1, .login h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.register button, .login button {
+    border: 0;
+    padding: 10px 15px;
+    border-radius: 5px;
+    background-color: dodgerblue;
+    color: #FFF;
+    width: 120px;
+    margin: 0 auto;
+    display: block;
+}
+
+.register form, .login form {
+    margin-bottom: 10px;
+}
+
+.register .error-message, .login .error-message {
+    background-color: rgb(185, 140, 140);
+    color: rgb(155, 76, 76);
+    width: 50%;
+}
