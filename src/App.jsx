@@ -20,7 +20,7 @@ function App() {
           <RegisterProvider>
             <Navigation />
             <Routes>
-              <Route path='/' element={<Home />} />
+              <Route path='/BlogTech' element={<Home />} />
               <Route path='/perfil' element={<Perfil />} />
               <Route path='/register' element={<Register />} />
               <Route path='/login' element={<Login />} />

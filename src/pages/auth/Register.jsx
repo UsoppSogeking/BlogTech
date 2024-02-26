@@ -47,7 +47,7 @@ function Register() {
             setPassword("");
             setConfirmPassword("");
 
-            navigate("/");
+            navigate("/BlogTech");
         } catch (err) {
             console.error('Erro ao registrar:', err);
             setError(err.message);

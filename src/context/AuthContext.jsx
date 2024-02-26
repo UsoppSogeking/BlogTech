@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
         setError(null);
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            navigate("/");
+            navigate("/BlogTech");
         } catch (error) {
             setError("Usuário ou senha inválidos.");
         }
