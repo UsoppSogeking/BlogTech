@@ -1,148 +1,75 @@
-/* Perfil.css */
-
 .perfil {
-    background-color: #e4ebf0;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    margin: 50px auto;
+    width: 80%;
+    max-width: 800px;
 }
 
-.user-img {
-    text-align: center;
-}
-
-.user-img img {
-    width: 150px;
-    height: 150px;
-    border-radius: 50%;
+.perfil h2 {
+    font-size: 24px;
+    color: #333;
     margin-bottom: 20px;
 }
 
-.user-datas {
-    text-align: center;
-    margin-top: 20px;
+.container {
+    display: flex;
+    align-items: center;
 }
 
-.user-datas h3 {
-    color: #4180ab;
-    font-size: 24px;
-    margin-bottom: 10px;
+.user-img {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    margin-right: 20px;
 }
 
-.file-input-container input[type="file"] {
-    display: none;
-}
-
-.file-input-container label {
-    display: inline-block;
-    background-color: #4180ab;
-    color: #ffffff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.file-input-container label:hover {
-    background-color: #336699;
-}
-
-.user-bio {
-    margin-top: 20px;
-    background-color: #ffffff;
-    border-radius: 10px;
-    padding: 15px;
-    box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.1);
-}
-
-.bio-container label, 
-.interests-container label {
-    display: block;
-    text-align: left;
-}
-
-.bio-input {
+.user-img img {
     width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%; /* Garante que a imagem seja circular */
+}
+
+.user-data {
+    flex: 1;
+}
+
+.user-data h3 {
+    font-size: 20px;
     color: #333;
-    font-size: 16px;
-    resize: vertical;
     margin-bottom: 10px;
 }
 
-.bio-char-counter {
-    color: #8ab3cf;
-    font-size: 14px;
-    text-align: right;
-}
-
-.save-bio-button {
-    background-color: #4180ab;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
+.user-data p {
     font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
+    color: #666;
+    margin-bottom: 5px;
 }
 
-.save-bio-button:hover {
-    background-color: #336699;
-}
-
-/* Estilos para interesses */
-.interests-container {
-    margin-top: 20px;
-}
-
-.interests-input {
-    width: 100%;
-    padding: 10px;
-    border: none;
-    border-radius: 5px;
-    background-color: #f9f9f9;
+.user-data p strong {
     color: #333;
-    font-size: 16px;
-    resize: vertical;
-    margin-bottom: 10px;
-}
-
-.save-interests-button {
-    background-color: #4180ab;
-    color: #ffffff;
-    border: none;
-    border-radius: 5px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-.save-interests-button:hover {
-    background-color: #336699;
 }
 
 .user-stats {
-    display: flex; /* Torna os elementos filhos flexíveis */
-    margin-top: 20px; /* Adiciona um espaço entre os interesses e as estatísticas do usuário */
-    justify-content: center;
+    display: flex;
+    justify-content: space-between;
 }
 
 .user-stats p {
-    margin-right: 20px; /* Adiciona espaçamento entre os elementos */
+    font-size: 14px;
+    color: #888;
 }
 
-@media screen and (min-width: 768px) {
-    .user-stats {
-        margin-top: 10px; /* Reduz o espaço superior entre os elementos em telas maiores */
+@media (max-width: 500px) {
+    .user-img {
+        width: 100px;
+        height: 100px;
     }
+}
 
-    .user-stats p {
-        margin-right: 10px; /* Reduz o espaçamento entre os elementos em telas maiores */
+@media (max-width: 400px) {
+    .user-img {
+        width: 80px;
+        height: 80px;
     }
 }

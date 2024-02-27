@@ -22,7 +22,7 @@ function Navigation() {
                                 <Nav.Link as={NavLink} to="/perfil">Perfil</Nav.Link>
                                 <NavDropdown title="Sair" id="basic-nav-dropdown">
                                     <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
-                                    <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
+                                    <NavDropdown.Item as={NavLink} to="/settings">Settings</NavDropdown.Item>
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item href="#action/3.4">Criar Post</NavDropdown.Item>
                                 </NavDropdown>
