@@ -6,11 +6,14 @@ import Login from './pages/auth/Login'
 import Navigation from './components/Navbar'
 import Perfil from './pages/Perfil/Perfil'
 import AccountSettings from './pages/AccountSettings/AccountSettings'
+import CreatePost from './pages/CreatePost/CreatePost'
 
 import { AuthProvider } from './context/AuthContext'
 import { RegisterProvider } from './context/RegisterContext'
 
 import './App.css'
+
+
 
 
 function App() {
@@ -27,6 +30,7 @@ function App() {
               <Route path='/register' element={<Register />} />
               <Route path='/login' element={<Login />} />
               <Route path='/settings' element={<AccountSettings />} />
+              <Route path='/createpost' element={<CreatePost />} />
             </Routes>
           </RegisterProvider>
         </AuthProvider>

@@ -24,7 +24,7 @@ function Navigation() {
                                     <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
                                     <NavDropdown.Item as={NavLink} to="/settings">Settings</NavDropdown.Item>
                                     <NavDropdown.Divider />
-                                    <NavDropdown.Item href="#action/3.4">Criar Post</NavDropdown.Item>
+                                    <NavDropdown.Item as={NavLink} to="/createpost">Criar Post</NavDropdown.Item>
                                 </NavDropdown>
                             </>
                         ) : (
