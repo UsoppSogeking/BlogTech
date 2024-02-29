@@ -103,10 +103,10 @@ const AccountSettings = () => {
                                 <input type="file" className="form-control" id="photo" name="photo" accept="image/*" onChange={handlePhotoChange} />
                             </div>
                             {photo && (
-                                <div className="mb-3">
+                                <div className="mb-3 text-center">
                                     <label className="form-label">Prévia da Foto de Perfil:</label>
-                                    <div className="user-img">
-                                        <img src={URL.createObjectURL(photo)} alt="Preview" />
+                                    <div className="user-img overflow-hidden">
+                                        <img src={URL.createObjectURL(photo)} alt="Preview" className="img-fluid rounded-circle" style={{ width: '150px', height: '150px' }} />
                                     </div>
                                 </div>
                             )}
@@ -124,7 +124,6 @@ const AccountSettings = () => {
                 </div>
             </div>
         </div>
-
     )
 }
 
