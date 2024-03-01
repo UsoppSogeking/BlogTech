@@ -1,4 +1,4 @@
-import { Image } from 'react-bootstrap';
+import { Image, Modal, Button } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
 
 import './Perfil.css';
@@ -13,7 +13,9 @@ const Perfil = () => {
     const [name, setName] = useState("");
     const [bio, setBio] = useState("");
     const [userInterests, setUserInterests] = useState([]);
-    const { posts, loading: postsLoading, error: postsError } = useUserPosts();
+    const { posts, loading: postsLoading, error: postsError, handleDeletePosts } = useUserPosts();
+    const [showModal, setShowModal] = useState(false);
+    const [postIdToDelete, setPostIdToDelete] = useState(null);
 
     useEffect(() => {
         if (userData) {
@@ -28,6 +30,23 @@ const Perfil = () => {
             fetchUserData();
         }
     }, [user, fetchUserData]);
+
+    const handleShowModal = (postId) => {
+        setPostIdToDelete(postId);
+        setShowModal(true);
+    }
+
+    const handleCloseModal = () => {
+        setShowModal(false);
+        setPostIdToDelete(null);
+    }
+
+    const handleConfirmDelete = async () => {
+        if (postIdToDelete) {
+            await handleDeletePosts(postIdToDelete);
+            handleCloseModal();
+        }
+    }
 
 
     if (loading) {
@@ -44,10 +63,6 @@ const Perfil = () => {
 
     const handleEditPost = (postId) => {
         // Lógica para edição do post
-    };
-
-    const handleDeletePost = (postId) => {
-        // Lógica para exclusão do post
     };
 
     return (
@@ -88,7 +103,7 @@ const Perfil = () => {
                                         <button className="btn btn-outline-primary me-2" onClick={() => handleEditPost(post.id)}>
                                             <AiOutlineEdit style={{ color: '#007bff' }} /> {/* Ícone de editar com cor azul suave */}
                                         </button>
-                                        <button className="btn btn-outline-danger" onClick={() => handleDeletePost(post.id)}>
+                                        <button className="btn btn-outline-danger" onClick={() => handleShowModal(post.id)}>
                                             <AiOutlineDelete style={{ color: '#ff6347' }} /> {/* Ícone de excluir com cor vermelha próxima ao laranja */}
                                         </button>
                                     </div>
@@ -98,6 +113,22 @@ const Perfil = () => {
                     ))}
                 </div>
             </div>
+            <Modal show={showModal} onHide={handleCloseModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Confirmar exclusão</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    Tem certeza de que deseja excluir este post?
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseModal}>
+                        Não
+                    </Button>
+                    <Button variant="danger" onClick={handleConfirmDelete}>
+                        Sim, Excluir
+                    </Button>
+                </Modal.Footer>
+            </Modal>
         </div>
     );
 }

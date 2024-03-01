@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from '../context/AuthContext';
-import { getPostsByUserId } from "../services/postService";
+import { deletePostById, getPostsByUserId } from "../services/postService";
 
 const useUserPosts = () => {
     const { user } = useAuth();
@@ -27,7 +27,17 @@ const useUserPosts = () => {
         fetchPosts();
     }, [user]);
 
-    return { posts, loading, error }
+    const handleDeletePosts = async (postId) => {
+        try {
+            await deletePostById(postId);
+            //Após a exclusão bem sucedida, atualize a lista de posts removendo o post excluido
+            setPosts(posts.filter(post => post.id !== postId));
+        } catch (err) {
+            console.error('Erro ao excluir o post:', err);
+        }
+    }
+
+    return { posts, loading, error, handleDeletePosts }
 }
 
 export default useUserPosts;
