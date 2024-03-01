@@ -41,7 +41,7 @@ const CreatePost = () => {
             image,
             interests,
             comments,
-            likes
+            likes,
         }
 
         await createPost(postData, image);
@@ -98,6 +98,13 @@ const CreatePost = () => {
                                 <label htmlFor="interests" className="form-label">Interesses:</label>
                                 <input type="text" id="interests" className="form-control" value={newInterest} onChange={(e) => setNewInterests(e.target.value)} />
                                 <button type="button" onClick={handleAddInterests} className="btn btn-secondary mt-2">Adicionar Interesse</button>
+                                {interests.length > 0 && (
+                                    <ul className="list-group mt-2">
+                                        {interests.map((interest, index) => (
+                                            <li key={index} className="list-group-item">{interest}</li>
+                                        ))}
+                                    </ul>
+                                )}
                             </div>
                             <div className="mb-3">
                                 <button type="submit" className="btn btn-primary" disabled={loading}>{loading ? "Aguarde..." : "Publicar"}</button>

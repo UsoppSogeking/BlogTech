@@ -22,8 +22,13 @@ const useCreatePosts = () => {
             //adicionar a URL da imagem ao objeto de dados do post
             const postDataWithImage = { ...postData, image: imageUrl };
 
+            const postDataWithTimestamp = {
+                ...postDataWithImage,
+                createdAt: new Date() //use a data atual como data de criação
+            }
+
             //Adicionar o novo post ao Firestore
-            const docRef = await addDoc(collection(db, 'posts'), postDataWithImage);
+            const docRef = await addDoc(collection(db, 'posts'), postDataWithTimestamp);
             console.log('Post criado com ID: ', docRef.id);
             setLoading(false);
         } catch (error) {
