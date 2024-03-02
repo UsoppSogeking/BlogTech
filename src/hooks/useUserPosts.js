@@ -14,6 +14,8 @@ const useUserPosts = () => {
                 if (user) {
                     const userId = user.uid;
                     const userPosts = await getPostsByUserId(userId);
+                    //Ordenar os posts por data de publicação, da mais recente para a mais antiga
+                    userPosts.sort((a, b) => b.createdAt.seconds - a.createdAt.seconds)
                     setPosts(userPosts);
                 }
                 setLoading(false);

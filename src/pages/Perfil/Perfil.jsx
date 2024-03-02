@@ -6,7 +6,7 @@ import useProfile from '../../hooks/useProfile';
 import { useEffect, useState } from 'react';
 import useUserPosts from '../../hooks/useUserPosts';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const Perfil = () => {
     const { user } = useAuth();
@@ -17,6 +17,8 @@ const Perfil = () => {
     const { posts, loading: postsLoading, error: postsError, handleDeletePosts } = useUserPosts();
     const [showModal, setShowModal] = useState(false);
     const [postIdToDelete, setPostIdToDelete] = useState(null);
+
+    const navigate = useNavigate();
 
     useEffect(() => {
         if (userData) {
@@ -32,7 +34,8 @@ const Perfil = () => {
         }
     }, [user, fetchUserData]);
 
-    const handleShowModal = (postId) => {
+    const handleShowModal = (e, postId) => {
+        e.stopPropagation();
         setPostIdToDelete(postId);
         setShowModal(true);
     }
@@ -49,6 +52,10 @@ const Perfil = () => {
         }
     }
 
+    const handlePostClick = (postId) => {
+        navigate(`/postdetails/${postId}`);
+    }
+
 
     if (loading) {
         return <div>Aguarde...</div>
@@ -62,8 +69,9 @@ const Perfil = () => {
         return <div>Dados do usuário não encontrados.</div>
     }
 
-    const handleEditPost = (postId) => {
+    const handleEditPost = (e, postId) => {
         // Lógica para edição do post
+        e.stopPropagation();
     };
 
     return (
@@ -95,24 +103,22 @@ const Perfil = () => {
                     {postsError && <p>Erro ao carregar posts: {postsError.message}</p>}
                     {!postsLoading && !postsError && posts.length === 0 && <p>Nenhum post encontrado.</p>}
                     {posts.map(post => (
-                        <div key={post.id} className="post card mb-3">
-                            <Link to={`/postdetails/${post.id}`} className="post-link">
-                                <div className="card-body ">
-                                    <h5 className="card-title">{post.title}</h5>
-                                    <p className="card-text">Interesses: {post.interests.join(', ')}</p>
-                                    <p className="card-text"><small className="text-muted">Data de publicação: {new Date(post.createdAt.seconds * 1000).toLocaleString()}</small></p>
-                                    {user && user.uid === post.userId && ( // Verifica se o usuário é o dono do post
-                                        <div>
-                                            <button className="btn btn-outline-primary me-2" onClick={() => handleEditPost(post.id)}>
-                                                <AiOutlineEdit style={{ color: '#007bff' }} /> {/* Ícone de editar com cor azul suave */}
-                                            </button>
-                                            <button className="btn btn-outline-danger" onClick={() => handleShowModal(post.id)}>
-                                                <AiOutlineDelete style={{ color: '#ff6347' }} /> {/* Ícone de excluir com cor vermelha próxima ao laranja */}
-                                            </button>
-                                        </div>
-                                    )}
-                                </div>
-                            </Link>
+                        <div key={post.id} className="post card mb-3" onClick={() => handlePostClick(post.id)}>
+                            <div className="card-body ">
+                                <h5 className="card-title">{post.title}</h5>
+                                <p className="card-text">Interesses: {post.interests.join(', ')}</p>
+                                <p className="card-text"><small className="text-muted">Data de publicação: {new Date(post.createdAt.seconds * 1000).toLocaleString()}</small></p>
+                                {user && user.uid === post.userId && ( // Verifica se o usuário é o dono do post
+                                    <div>
+                                        <button className="btn btn-outline-primary me-2" onClick={() => handleEditPost(post.id)}>
+                                            <AiOutlineEdit style={{ color: '#007bff' }} /> {/* Ícone de editar com cor azul suave */}
+                                        </button>
+                                        <button className="btn btn-outline-danger" onClick={(e) => handleShowModal(e, post.id)}>
+                                            <AiOutlineDelete style={{ color: '#ff6347' }} /> {/* Ícone de excluir com cor vermelha próxima ao laranja */}
+                                        </button>
+                                    </div>
+                                )}
+                            </div>
                         </div>
                     ))}
                 </div>

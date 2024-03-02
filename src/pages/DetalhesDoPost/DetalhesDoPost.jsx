@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
 import useProfile from '../../hooks/useProfile';
 import { getPostById } from '../../services/postService';
+import ReactMarkdown from 'react-markdown';
 
 const DetalhesDoPost = () => {
     const { postId } = useParams();
@@ -48,8 +49,10 @@ const DetalhesDoPost = () => {
             <div className="detalhes-do-post text-center" style={{ marginTop: '20px' }}>
                 <h2 style={{ textAlign: "center", marginBottom: "20px" }}>{post?.title}</h2>
                 <h5 style={{ marginBottom: "15px" }}>{post?.interests.join(', ')}</h5>
-                <img src={post?.image} alt="Imagem do post" className="img-fluid" />
-                <p style={{ textAlign: "justify", lineHeight: "1.6", fontSize: "16px" }}>{post?.content}</p>
+                <img src={post?.image} alt="Imagem do post" className="img-fluid" style={{ marginBottom: '20px' }} />
+                <div className="content-container" style={{ textAlign: "justify" }}>
+                    <ReactMarkdown>{post.content}</ReactMarkdown>
+                </div>
             </div>
         </div>
     )

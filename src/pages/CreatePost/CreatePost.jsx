@@ -32,6 +32,8 @@ const CreatePost = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
 
+        const formattedInterests = interests.split(',').map(interest => interest.trim());
+
         //Criando o objeto de dados do post
         const postData = {
             postId,
@@ -39,7 +41,7 @@ const CreatePost = () => {
             title,
             content,
             image,
-            interests,
+            interests: formattedInterests,
             comments,
             likes,
         }
@@ -57,13 +59,6 @@ const CreatePost = () => {
     const handlePhotoChange = (e) => {
         const file = e.target.files[0];
         setImage(file);
-    }
-
-    const handleAddInterests = () => {
-        if (newInterest.trim() !== "") {
-            setInterests([...interests, newInterest.trim()]); //adiciona o novo interesse ao Array
-            setNewInterests("");
-        }
     }
 
     if (loading) {
@@ -96,15 +91,8 @@ const CreatePost = () => {
                             )}
                             <div className="mb-3">
                                 <label htmlFor="interests" className="form-label">Interesses:</label>
-                                <input type="text" id="interests" className="form-control" value={newInterest} onChange={(e) => setNewInterests(e.target.value)} />
-                                <button type="button" onClick={handleAddInterests} className="btn btn-secondary mt-2">Adicionar Interesse</button>
-                                {interests.length > 0 && (
-                                    <ul className="list-group mt-2">
-                                        {interests.map((interest, index) => (
-                                            <li key={index} className="list-group-item">{interest}</li>
-                                        ))}
-                                    </ul>
-                                )}
+                                <input type="text" id="interests" className="form-control" value={interests} onChange={(e) => setInterests(e.target.value)} required />
+                                <div id="interestsHelp" className="form-text">Digite os interesses separados por vírgula (,).</div>
                             </div>
                             <div className="mb-3">
                                 <button type="submit" className="btn btn-primary" disabled={loading}>{loading ? "Aguarde..." : "Publicar"}</button>
