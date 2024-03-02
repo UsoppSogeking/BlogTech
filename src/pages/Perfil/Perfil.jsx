@@ -1,4 +1,4 @@
-import { Image, Modal, Button } from 'react-bootstrap';
+import { Image, Modal, Button, Form } from 'react-bootstrap';
 import { useAuth } from '../../context/AuthContext';
 
 import './Perfil.css';
@@ -14,10 +14,10 @@ const Perfil = () => {
     const [name, setName] = useState("");
     const [bio, setBio] = useState("");
     const [userInterests, setUserInterests] = useState([]);
-    const { posts, loading: postsLoading, error: postsError, handleDeletePosts } = useUserPosts();
+    const { posts, loading: postsLoading, error: postsError, handleDeletePost, handleEditPost } = useUserPosts();
     const [showModal, setShowModal] = useState(false);
     const [postIdToDelete, setPostIdToDelete] = useState(null);
-
+    const [editedPost, setEditedPost] = useState(null);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -47,7 +47,7 @@ const Perfil = () => {
 
     const handleConfirmDelete = async () => {
         if (postIdToDelete) {
-            await handleDeletePosts(postIdToDelete);
+            await handleDeletePost(postIdToDelete);
             handleCloseModal();
         }
     }
@@ -56,6 +56,40 @@ const Perfil = () => {
         navigate(`/postdetails/${postId}`);
     }
 
+    const handleEditPostClick = (e, post) => {
+        e.stopPropagation();
+        setEditedPost(post);
+        setShowModal(true);
+    };
+
+    const handleSubmitEditPost = async (e) => {
+        e.preventDefault();
+        try {
+            await handleEditPost(editedPost.id, editedPost);
+            handleCloseModal();
+        } catch (err) {
+            console.error('Erro ao editar o post: ', err);
+        }
+    }
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+
+        if(file.size > 1048487) {
+            alert("A imagem selecionada é muito grande. Por favor, selecione uma imagem menor.");
+            return;
+        }
+
+        if (file) {
+            const reader = new FileReader();
+
+            reader.onloadend = () => {
+                const imageUrl = reader.result;
+                setEditedPost({ ...editedPost, image: imageUrl });
+            }
+            reader.readAsDataURL(file);
+        }
+    }
 
     if (loading) {
         return <div>Aguarde...</div>
@@ -68,11 +102,6 @@ const Perfil = () => {
     if (!userData) {
         return <div>Dados do usuário não encontrados.</div>
     }
-
-    const handleEditPost = (e, postId) => {
-        // Lógica para edição do post
-        e.stopPropagation();
-    };
 
     return (
 
@@ -110,7 +139,7 @@ const Perfil = () => {
                                 <p className="card-text"><small className="text-muted">Data de publicação: {new Date(post.createdAt.seconds * 1000).toLocaleString()}</small></p>
                                 {user && user.uid === post.userId && ( // Verifica se o usuário é o dono do post
                                     <div>
-                                        <button className="btn btn-outline-primary me-2" onClick={() => handleEditPost(post.id)}>
+                                        <button className="btn btn-outline-primary me-2" onClick={(e) => handleEditPostClick(e, post)}>
                                             <AiOutlineEdit style={{ color: '#007bff' }} /> {/* Ícone de editar com cor azul suave */}
                                         </button>
                                         <button className="btn btn-outline-danger" onClick={(e) => handleShowModal(e, post.id)}>
@@ -125,17 +154,43 @@ const Perfil = () => {
             </div>
             <Modal show={showModal} onHide={handleCloseModal}>
                 <Modal.Header closeButton>
-                    <Modal.Title>Confirmar exclusão</Modal.Title>
+                    <Modal.Title>{editedPost ? 'Editar Post' : 'Confirmar exclusão'}</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    Tem certeza de que deseja excluir este post?
+                    {editedPost ? (
+                        <Form onSubmit={handleSubmitEditPost}>
+                            <Form.Group controlId="formBasicTitle">
+                                <Form.Label>Título</Form.Label>
+                                <Form.Control type="text" placeholder="Título do post" value={editedPost.title} onChange={(e) => setEditedPost({ ...editedPost, title: e.target.value })} />
+                            </Form.Group>
+                            <Form.Group controlId="formBasicImage">
+                                <Form.Label>Imagem</Form.Label>
+                                <Form.Control type="file" onChange={handleImageChange} />
+                                {/* Você pode adicionar uma prévia da imagem aqui se desejar */}
+                                {/* <img src={previewImage} alt="Preview" /> */}
+                            </Form.Group>
+                            <Form.Group controlId="formBasicInterests">
+                                <Form.Label>Interesses</Form.Label>
+                                <Form.Control type="text" placeholder="Interesses (separados por vírgula)" value={editedPost.interests.join(', ')} onChange={(e) => setEditedPost({ ...editedPost, interests: e.target.value.split(',').map(interest => interest.trim()) })} />
+                            </Form.Group>
+                            <Form.Group controlId="formBasicContent">
+                                <Form.Label>Conteúdo</Form.Label>
+                                <Form.Control as="textarea" rows={3} placeholder="Conteúdo do post" value={editedPost.content} onChange={(e) => setEditedPost({ ...editedPost, content: e.target.value })} />
+                            </Form.Group>
+                            {/* <Button variant="primary" type="submit">
+                                Salvar Alterações
+                            </Button> */}
+                        </Form>
+                    ) : (
+                        <p>Tem certeza de que deseja excluir este post?</p>
+                    )}
                 </Modal.Body>
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>
                         Não
                     </Button>
-                    <Button variant="danger" onClick={handleConfirmDelete}>
-                        Sim, Excluir
+                    <Button variant="danger" onClick={editedPost ? handleSubmitEditPost : handleConfirmDelete}>
+                        {editedPost ? 'Salvar Alterações' : 'Sim, Excluir'}
                     </Button>
                 </Modal.Footer>
             </Modal>

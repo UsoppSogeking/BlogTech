@@ -1,5 +1,5 @@
 import { db } from '../firebase';
-import { collection, where, query, getDocs, doc, deleteDoc, getDoc } from 'firebase/firestore';
+import { collection, where, query, getDocs, doc, deleteDoc, getDoc, updateDoc } from 'firebase/firestore';
 
 //Função para buscar os posts de um usuário pelo Id
 const getPostsByUserId = async (userId) => {
@@ -43,5 +43,16 @@ const getPostById = async (postId) => {
     }
 }
 
+const updatePost = async (postId, updatedData) => {
+    try {
+        const postRef = doc(db, 'posts', postId);
+        await updateDoc(postRef, updatedData);
+        console.log('Post atualizado com sucesso!');
+    } catch (error) {
+        console.error('Erro ao atualizar o post:', error);
+        throw new Error('Erro ao atualizar post.');
+    }
+}
 
-export { getPostsByUserId, deletePostById, getPostById };
+
+export { getPostsByUserId, deletePostById, getPostById, updatePost };
