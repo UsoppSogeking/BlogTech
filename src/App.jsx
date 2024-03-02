@@ -12,6 +12,7 @@ import { AuthProvider } from './context/AuthContext'
 import { RegisterProvider } from './context/RegisterContext'
 
 import './App.css'
+import DetalhesDoPost from './pages/DetalhesDoPost/DetalhesDoPost'
 
 
 
@@ -31,6 +32,7 @@ function App() {
               <Route path='/login' element={<Login />} />
               <Route path='/settings' element={<AccountSettings />} />
               <Route path='/createpost' element={<CreatePost />} />
+              <Route path='/postdetails/:postId' element={<DetalhesDoPost />} />
             </Routes>
           </RegisterProvider>
         </AuthProvider>

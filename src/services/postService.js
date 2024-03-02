@@ -1,5 +1,5 @@
 import { db } from '../firebase';
-import { collection, where, query, getDocs, doc, deleteDoc } from 'firebase/firestore';
+import { collection, where, query, getDocs, doc, deleteDoc, getDoc } from 'firebase/firestore';
 
 //Função para buscar os posts de um usuário pelo Id
 const getPostsByUserId = async (userId) => {
@@ -29,5 +29,19 @@ const deletePostById = async (postId) => {
     }
 }
 
+const getPostById = async (postId) => {
+    try {
+        const postDoc = await getDoc(doc(db, 'posts', postId));
+        if (postDoc.exists()) {
+            return { id: postDoc.id, ...postDoc.data() }
+        } else {
+            throw new Error('Post não encontrado');
+        }
+    } catch (error) {
+        console.error('Erro ao buscar o post:', error);
+        throw new Error('Erro ao buscar o post');
+    }
+}
 
-export { getPostsByUserId, deletePostById };
+
+export { getPostsByUserId, deletePostById, getPostById };

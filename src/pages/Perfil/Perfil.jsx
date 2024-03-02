@@ -6,6 +6,7 @@ import useProfile from '../../hooks/useProfile';
 import { useEffect, useState } from 'react';
 import useUserPosts from '../../hooks/useUserPosts';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
+import { Link } from 'react-router-dom';
 
 const Perfil = () => {
     const { user } = useAuth();
@@ -66,6 +67,7 @@ const Perfil = () => {
     };
 
     return (
+
         <div className="perfil d-flex flex-column align-items-center" style={{ margin: "50px auto", maxWidth: "800px" }}>
             <h2 className="mb-4">Perfil</h2>
             <div className="container">
@@ -94,21 +96,23 @@ const Perfil = () => {
                     {!postsLoading && !postsError && posts.length === 0 && <p>Nenhum post encontrado.</p>}
                     {posts.map(post => (
                         <div key={post.id} className="post card mb-3">
-                            <div className="card-body ">
-                                <h5 className="card-title">{post.title}</h5>
-                                <p className="card-text">Interesses: {post.interests.join(', ')}</p>
-                                <p className="card-text"><small className="text-muted">Data de publicação: {new Date(post.createdAt.seconds * 1000).toLocaleString()}</small></p>
-                                {user && user.uid === post.userId && ( // Verifica se o usuário é o dono do post
-                                    <div>
-                                        <button className="btn btn-outline-primary me-2" onClick={() => handleEditPost(post.id)}>
-                                            <AiOutlineEdit style={{ color: '#007bff' }} /> {/* Ícone de editar com cor azul suave */}
-                                        </button>
-                                        <button className="btn btn-outline-danger" onClick={() => handleShowModal(post.id)}>
-                                            <AiOutlineDelete style={{ color: '#ff6347' }} /> {/* Ícone de excluir com cor vermelha próxima ao laranja */}
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
+                            <Link to={`/postdetails/${post.id}`} className="post-link">
+                                <div className="card-body ">
+                                    <h5 className="card-title">{post.title}</h5>
+                                    <p className="card-text">Interesses: {post.interests.join(', ')}</p>
+                                    <p className="card-text"><small className="text-muted">Data de publicação: {new Date(post.createdAt.seconds * 1000).toLocaleString()}</small></p>
+                                    {user && user.uid === post.userId && ( // Verifica se o usuário é o dono do post
+                                        <div>
+                                            <button className="btn btn-outline-primary me-2" onClick={() => handleEditPost(post.id)}>
+                                                <AiOutlineEdit style={{ color: '#007bff' }} /> {/* Ícone de editar com cor azul suave */}
+                                            </button>
+                                            <button className="btn btn-outline-danger" onClick={() => handleShowModal(post.id)}>
+                                                <AiOutlineDelete style={{ color: '#ff6347' }} /> {/* Ícone de excluir com cor vermelha próxima ao laranja */}
+                                            </button>
+                                        </div>
+                                    )}
+                                </div>
+                            </Link>
                         </div>
                     ))}
                 </div>

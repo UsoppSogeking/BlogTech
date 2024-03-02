@@ -82,3 +82,11 @@
 .post:hover {
     transform: translateY(-5px);
 }
+
+.post-link {
+    color: inherit;
+    /* Use a cor padrão do texto do elemento pai */
+    text-decoration: none;
+    /* Remova a sublinhado padrão dos links */
+}
+
