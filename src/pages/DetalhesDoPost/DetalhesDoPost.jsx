@@ -151,7 +151,7 @@ const DetalhesDoPost = () => {
                                     </>
                                 ) : (
                                     <>
-                                        <div className="comment-icons">
+                                        <div className="ml-auto comment-icons"> {/* Adicionamos a classe 'ml-auto' para alinhar os ícones à direita */}
                                             {/* Verificar se o usuário é o autor do post ou o autor do comentário */}
                                             {(user.uid === profileData.uid || user.uid === comment.userId) && (
                                                 <AiOutlineEdit
@@ -160,7 +160,8 @@ const DetalhesDoPost = () => {
                                                         setEditingCommentId(comment.id);
                                                         setEditingCommentText(comment.text);
                                                     }}
-                                                    style={{ color: '#007bff' }} // Adicione esta linha para definir a cor do ícone de edição
+                                                    size={24}
+                                                    style={{ color: '#007bff', fontSize: '20px' }} // Adicione esta linha para definir a cor e o tamanho do ícone de edição
                                                 />
                                             )}
                                             {/* Verificar se o usuário é o autor do post ou o autor do comentário */}
@@ -168,7 +169,8 @@ const DetalhesDoPost = () => {
                                                 <AiOutlineDelete
                                                     className="delete-icon"
                                                     onClick={() => handleDeleteComment(comment.id)}
-                                                    style={{ color: '#ff6347' }} // Adicione esta linha para definir a cor do ícone de exclusão
+                                                    size={24}
+                                                    style={{ color: '#ff6347', fontSize: '20px' }} // Adicione esta linha para definir a cor e o tamanho do ícone de exclusão
                                                 />
                                             )}
                                         </div>
