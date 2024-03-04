@@ -5,10 +5,11 @@ import useProfile from '../../hooks/useProfile';
 import { getPostById } from '../../services/postService';
 import ReactMarkdown from 'react-markdown';
 import CommentForm from '../../components/CommentForm';
-import { useAuth } from '../../context/AuthContext';
 import { db } from '../../firebase';
-import { collection, getDocs, orderBy, query, where } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDocs, orderBy, query, updateDoc, where } from 'firebase/firestore';
 import { getUserPhotoUrl } from '../../utils/userUtils';
+import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
+import { useAuth } from '../../context/AuthContext';
 
 import './DetalhesDoPost.css';
 
@@ -20,6 +21,8 @@ const DetalhesDoPost = () => {
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [editingCommentId, setEditingCommentId] = useState(null);
+    const [editingCommentText, setEditingCommentText] = useState('');
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -73,6 +76,32 @@ const DetalhesDoPost = () => {
         setComments(fetchedComments);
     }
 
+    const handleEditComment = async (commentId, newText) => {
+        try {
+            const commentDocRef = doc(db, 'comments', commentId);
+            await updateDoc(commentDocRef, {
+                text: newText
+            });
+
+            setEditingCommentId(null);
+            setEditingCommentText('');
+
+            updateComments();
+        } catch (error) {
+            console.error('Erro ao editar comentário:', error);
+        }
+    }
+
+    const handleDeleteComment = async (commentId) => {
+        try {
+            await deleteDoc(doc(db, 'comments', commentId));
+
+            updateComments();
+        } catch (error) {
+            console.error('Erro ao excluir comentário:', error);
+        }
+    }
+
     if (loading || profileLoading) {
         return <div>Carregando detalhes do post...</div>;
     }
@@ -109,9 +138,49 @@ const DetalhesDoPost = () => {
                             <div className="user-info d-flex align-items-center mb-2">
                                 <Image src={comment.userPhoto} alt="Foto de perfil do usuário" roundedCircle style={{ width: "40px", height: "40px" }} />
                                 <span className="ms-2">{comment.userName}</span>
+                                {/* ícones de edição e exclusão */}
+                                {editingCommentId === comment.id ? (
+                                    <>
+                                        <input
+                                            className="comment-edit-input"
+                                            type="text"
+                                            value={editingCommentText}
+                                            onChange={(e) => setEditingCommentText(e.target.value)}
+                                        />
+                                        <button className="comment-edit-button" onClick={() => handleEditComment(comment.id, editingCommentText)}>Salvar</button>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="comment-icons">
+                                            {/* Verificar se o usuário é o autor do post ou o autor do comentário */}
+                                            {(user.uid === profileData.uid || user.uid === comment.userId) && (
+                                                <AiOutlineEdit
+                                                    className="edit-icon"
+                                                    onClick={() => {
+                                                        setEditingCommentId(comment.id);
+                                                        setEditingCommentText(comment.text);
+                                                    }}
+                                                    style={{ color: '#007bff' }} // Adicione esta linha para definir a cor do ícone de edição
+                                                />
+                                            )}
+                                            {/* Verificar se o usuário é o autor do post ou o autor do comentário */}
+                                            {(user.uid === profileData.uid || user.uid === comment.userId || profileData.uid === user.uid) && (
+                                                <AiOutlineDelete
+                                                    className="delete-icon"
+                                                    onClick={() => handleDeleteComment(comment.id)}
+                                                    style={{ color: '#ff6347' }} // Adicione esta linha para definir a cor do ícone de exclusão
+                                                />
+                                            )}
+                                        </div>
+                                    </>
+                                )}
                             </div>
-                            <div className="comment-content">
-                                <p>{comment.text}</p>
+                            <div className={`comment-content ${editingCommentId === comment.id && 'edit-mode'}`}>
+                                {editingCommentId === comment.id ? (
+                                    <p>Modo de edição...</p>
+                                ) : (
+                                    <p>{comment.text}</p>
+                                )}
                             </div>
                         </li>
                     ))}

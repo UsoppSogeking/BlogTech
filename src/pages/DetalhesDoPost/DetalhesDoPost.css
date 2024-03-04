@@ -11,3 +11,42 @@
 .comments-section .comment-content {
     width: calc(100% - 50px); /* Ajuste conforme necessário */
 }
+
+/* Adicione estas regras ao seu arquivo CSS (DetalhesDoPost.css) */
+
+.comment-edit-input {
+    width: 70%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    margin-left: 10px;
+}
+
+.comment-edit-button {
+    margin-left: 10px;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.comment-edit-button:hover {
+    background-color: #0056b3;
+}
+
+.comment-icons {
+    margin-left: 10px;
+}
+
+.comment-icons svg {
+    margin-right: 5px;
+    cursor: pointer;
+}
+
+.comment-content.edit-mode {
+    background-color: #f0f0f0;
+    padding: 10px;
+    border-radius: 5px;
+}

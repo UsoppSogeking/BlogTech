@@ -5,7 +5,7 @@ import { db } from '../firebase';
 import { getUserName, getUserPhotoUrl } from '../utils/userUtils';
 import { Form, Button } from 'react-bootstrap';
 
-const CommentForm = ({ postId, userName, userPhoto, updateComments }) => {
+const CommentForm = ({ postId, userName, updateComments }) => {
     const [commentText, setCommentText] = useState('');
     const { user } = useAuth();
     const [commentUserName, setCommentUserName] = useState('');
