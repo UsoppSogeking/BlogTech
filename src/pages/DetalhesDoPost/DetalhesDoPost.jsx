@@ -161,7 +161,7 @@ const DetalhesDoPost = () => {
                                                         setEditingCommentText(comment.text);
                                                     }}
                                                     size={24}
-                                                    style={{ color: '#007bff', fontSize: '20px' }} // Adicione esta linha para definir a cor e o tamanho do ícone de edição
+                                                    style={{ color: '#007bff' }} // Adicione esta linha para definir a cor e o tamanho do ícone de edição
                                                 />
                                             )}
                                             {/* Verificar se o usuário é o autor do post ou o autor do comentário */}
@@ -170,7 +170,7 @@ const DetalhesDoPost = () => {
                                                     className="delete-icon"
                                                     onClick={() => handleDeleteComment(comment.id)}
                                                     size={24}
-                                                    style={{ color: '#ff6347', fontSize: '20px' }} // Adicione esta linha para definir a cor e o tamanho do ícone de exclusão
+                                                    style={{ color: '#ff6347' }} // Adicione esta linha para definir a cor e o tamanho do ícone de exclusão
                                                 />
                                             )}
                                         </div>
