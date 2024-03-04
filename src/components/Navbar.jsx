@@ -21,16 +21,16 @@ function Navigation() {
                             <>
                                 <Nav.Link as={NavLink} to="/perfil">Perfil</Nav.Link>
                                 <NavDropdown title="Sair" id="basic-nav-dropdown">
-                                    <NavDropdown.Item onClick={logout}>Logout</NavDropdown.Item>
-                                    <NavDropdown.Item as={NavLink} to="/settings">Settings</NavDropdown.Item>
+                                    <NavDropdown.Item onClick={logout}>Encerrar Sessão</NavDropdown.Item>
+                                    <NavDropdown.Item as={NavLink} to="/settings">Conta</NavDropdown.Item>
                                     <NavDropdown.Divider />
                                     <NavDropdown.Item as={NavLink} to="/createpost">Criar Post</NavDropdown.Item>
                                 </NavDropdown>
                             </>
                         ) : (
                             <NavDropdown title="Entrar" id="basic-nav-dropdown">
-                                <NavDropdown.Item as={NavLink} to="/register">Register</NavDropdown.Item>
-                                <NavDropdown.Item as={NavLink} to="/login">Login</NavDropdown.Item>
+                                <NavDropdown.Item as={NavLink} to="/register">Cadastre-se</NavDropdown.Item>
+                                <NavDropdown.Item as={NavLink} to="/login">Iniciar Sessão</NavDropdown.Item>
                                 <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
                                 <NavDropdown.Divider />
                                 <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>

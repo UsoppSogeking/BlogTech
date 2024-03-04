@@ -1,0 +1,13 @@
+.comments-section {
+    width: 100%;
+    margin-top: 10px;
+}
+
+.comments-section .user-info {
+    display: flex;
+    align-items: center;
+}
+
+.comments-section .comment-content {
+    width: calc(100% - 50px); /* Ajuste conforme necessário */
+}

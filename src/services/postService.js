@@ -1,5 +1,5 @@
 import { db } from '../firebase';
-import { collection, where, query, getDocs, doc, deleteDoc, getDoc, updateDoc } from 'firebase/firestore';
+import { collection, where, query, getDocs, doc, deleteDoc, getDoc, updateDoc, arrayUnion } from 'firebase/firestore';
 
 //Função para buscar os posts de um usuário pelo Id
 const getPostsByUserId = async (userId) => {
@@ -54,5 +54,18 @@ const updatePost = async (postId, updatedData) => {
     }
 }
 
+const addCommentToPost = async (postId, commentData) => {
+    try {
+        const postRef = doc(db, 'posts', postId);
+        await updateDoc(postRef, {
+            comments: arrayUnion(commentData)
+        });
+        console.log('Comentário adicionado com sucesso!');
+    } catch (error) {
+        console.error('Erro ao adicionar comentário:', error);
+        throw new Error('Erro ao adicionar comentário.');
+    }
+}
 
-export { getPostsByUserId, deletePostById, getPostById, updatePost };
+
+export { getPostsByUserId, deletePostById, getPostById, updatePost, addCommentToPost };
