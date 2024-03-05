@@ -139,10 +139,10 @@ const Perfil = () => {
                                 <p className="card-text"><small className="text-muted">Data de publicação: {new Date(post.createdAt.seconds * 1000).toLocaleString()}</small></p>
                                 {user && user.uid === post.userId && ( // Verifica se o usuário é o dono do post
                                     <div>
-                                        <button className="btn btn-outline-primary me-2" onClick={(e) => handleEditPostClick(e, post)}>
+                                        <button className="btn btn-outline-primary me-2 edit-btn" onClick={(e) => handleEditPostClick(e, post)}>
                                             <AiOutlineEdit style={{ color: '#007bff' }} /> {/* Ícone de editar com cor azul suave */}
                                         </button>
-                                        <button className="btn btn-outline-danger" onClick={(e) => handleShowModal(e, post.id)}>
+                                        <button className="btn btn-outline-danger delete-btn" onClick={(e) => handleShowModal(e, post.id)}>
                                             <AiOutlineDelete style={{ color: '#ff6347' }} /> {/* Ícone de excluir com cor vermelha próxima ao laranja */}
                                         </button>
                                     </div>

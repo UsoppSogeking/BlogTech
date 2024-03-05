@@ -2,13 +2,13 @@ import { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
 import useProfile from '../../hooks/useProfile';
-import { getPostById } from '../../services/postService';
+import { getPostById, } from '../../services/postService';
 import ReactMarkdown from 'react-markdown';
 import CommentForm from '../../components/CommentForm';
 import { db } from '../../firebase';
 import { collection, deleteDoc, doc, getDocs, orderBy, query, updateDoc, where } from 'firebase/firestore';
 import { getUserPhotoUrl } from '../../utils/userUtils';
-import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
+import { AiOutlineEdit, AiOutlineDelete, AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { useAuth } from '../../context/AuthContext';
 
 import './DetalhesDoPost.css';
@@ -21,6 +21,8 @@ const DetalhesDoPost = () => {
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const [liked, setLiked] = useState(false);
+    const [likesCount, setLikesCount] = useState(0);
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editingCommentText, setEditingCommentText] = useState('');
 
@@ -38,6 +40,38 @@ const DetalhesDoPost = () => {
         }
         fetchPost();
     }, [postId]);
+
+    useEffect(() => {
+        if (post && user) {
+            setLikesCount(post.likes);
+        }
+    }, [post]);
+
+    const handleLikeClick = async () => {
+        if (!user) {
+            return;
+        }
+
+        try {
+            if (liked) {
+                // Se o usuário já curtiu, decrementar o contador
+                setLikesCount(prevCount => prevCount - 1);
+            } else {
+                // Se o usuário ainda não curtiu, incrementar o contador
+                setLikesCount(prevCount => prevCount + 1);
+            }
+
+            // Atualizar o estado liked para o oposto do estado atual
+            setLiked(!liked);
+
+            // Atualizar o banco de dados
+            await updateDoc(doc(db, 'posts', postId), {
+                likes: liked ? likesCount - 1 : likesCount + 1
+            });
+        } catch (error) {
+            console.error('Erro ao atualizar o like:', error);
+        }
+    }
 
     useEffect(() => {
         const fetchComments = async () => {
@@ -128,6 +162,19 @@ const DetalhesDoPost = () => {
                 <div className="content-container" style={{ textAlign: "justify" }}>
                     <ReactMarkdown>{post.content}</ReactMarkdown>
                 </div>
+                <div className="like-section">
+                    <button
+                        className={`btn btn-outline-danger d-flex align-items-center justify-content-start position-relative like-button ${liked ? 'active' : ''}`}
+                        onClick={handleLikeClick}
+                    >
+                        {liked ? (
+                            <AiFillHeart style={{ color: '#fff' }} />
+                        ) : (
+                            <AiOutlineHeart style={{ color: '#dc3545' }} />
+                        )}
+                        <span className="ms-2">{likesCount}</span>
+                    </button>
+                </div>
                 <CommentForm postId={postId} userName={profileData?.name} updateComments={updateComments} />
             </div>
             <div className="comments-section">
@@ -154,24 +201,29 @@ const DetalhesDoPost = () => {
                                         <div className="ml-auto comment-icons"> {/* Adicionamos a classe 'ml-auto' para alinhar os ícones à direita */}
                                             {/* Verificar se o usuário é o autor do post ou o autor do comentário */}
                                             {(user.uid === profileData.uid || user.uid === comment.userId) && (
-                                                <AiOutlineEdit
-                                                    className="edit-icon"
-                                                    onClick={() => {
-                                                        setEditingCommentId(comment.id);
-                                                        setEditingCommentText(comment.text);
-                                                    }}
-                                                    size={24}
-                                                    style={{ color: '#007bff' }} // Adicione esta linha para definir a cor e o tamanho do ícone de edição
-                                                />
+                                                <button className="btn btn-outline-primary me-2 edit-btn">
+                                                    <AiOutlineEdit
+                                                        className="edit-icon"
+                                                        onClick={() => {
+                                                            setEditingCommentId(comment.id);
+                                                            setEditingCommentText(comment.text);
+                                                        }}
+                                                        size={24}
+                                                        style={{ color: '#007bff' }} // Adicione esta linha para definir a cor e o tamanho do ícone de edição
+                                                    />
+                                                </button>
+
                                             )}
                                             {/* Verificar se o usuário é o autor do post ou o autor do comentário */}
                                             {(user.uid === profileData.uid || user.uid === comment.userId || profileData.uid === user.uid) && (
-                                                <AiOutlineDelete
-                                                    className="delete-icon"
-                                                    onClick={() => handleDeleteComment(comment.id)}
-                                                    size={24}
-                                                    style={{ color: '#ff6347' }} // Adicione esta linha para definir a cor e o tamanho do ícone de exclusão
-                                                />
+                                                <button className="btn btn-outline-danger delete-btn">
+                                                    <AiOutlineDelete
+                                                        className="delete-icon"
+                                                        onClick={() => handleDeleteComment(comment.id)}
+                                                        size={24}
+                                                        style={{ color: '#ff6347' }} // Adicione esta linha para definir a cor e o tamanho do ícone de exclusão
+                                                    />
+                                                </button>
                                             )}
                                         </div>
                                     </>

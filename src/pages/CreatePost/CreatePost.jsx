@@ -42,7 +42,6 @@ const CreatePost = () => {
             content,
             image,
             interests: formattedInterests,
-            comments,
             likes,
         }
 

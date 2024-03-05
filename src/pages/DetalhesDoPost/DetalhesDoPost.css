@@ -1,6 +1,23 @@
+.like-button {
+    background-color: transparent;
+    transition: background-color 0.3s;
+    margin-bottom: 20px;
+}
+
+.like-button.active {
+    color: #fff;
+}
+
 .comments-section {
     width: 100%;
     margin-top: 10px;
+}
+
+.comments-section .comment {
+    display: flex;
+    align-items: flex-start; /* Alinha os itens ao topo */
+    padding: 10px 0;
+    border-bottom: 1px solid #ccc;
 }
 
 .comments-section .user-info {
@@ -8,11 +25,18 @@
     align-items: center;
 }
 
-.comments-section .comment-content {
-    width: calc(100% - 50px); /* Ajuste conforme necessário */
+.comments-section .user-info img {
+    margin-right: 10px; /* Adiciona um pequeno espaço entre a imagem e o nome do usuário */
 }
 
-/* Adicione estas regras ao seu arquivo CSS (DetalhesDoPost.css) */
+.comment-content {
+    flex: 1; /* Ocupa todo o espaço disponível */
+    word-wrap: break-word; /* Quebra de palavra */
+}
+
+.comment-icons {
+    margin-left: auto; /* Move os ícones para a direita */
+}
 
 .comment-edit-input {
     width: 70%;
@@ -36,17 +60,32 @@
     background-color: #0056b3;
 }
 
-.comment-icons {
-    margin-left: 10px;
-}
-
-.comment-icons svg {
-    margin-right: 5px;
-    cursor: pointer;
-}
-
 .comment-content.edit-mode {
     background-color: #f0f0f0;
     padding: 10px;
     border-radius: 5px;
+}
+
+.edit-btn {
+    background-color: transparent;
+    border: none;
+    padding: 0; /* Remova o preenchimento para evitar espaços extras */
+    transition: background-color 0.3s; /* Adicione uma transição suave */
+}
+
+.edit-btn:hover svg {
+    fill: #fff; /* Altere a cor do preenchimento do SVG dentro do botão ao passar o mouse sobre ele */
+    transition: fill 0.3s; /* Adicione uma transição suave para a cor do preenchimento do SVG */
+}
+
+.delete-btn {
+    background-color: transparent;
+    border: none;
+    padding: 0; /* Remova o preenchimento para evitar espaços extras */
+    transition: background-color 0.3s; /* Adicione uma transição suave */
+}
+
+.delete-btn:hover svg {
+    fill: #fff; /* Altere a cor do preenchimento do SVG dentro do botão ao passar o mouse sobre ele */
+    transition: fill 0.3s; /* Adicione uma transição suave para a cor do preenchimento do SVG */
 }

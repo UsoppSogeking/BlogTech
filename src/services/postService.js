@@ -67,5 +67,15 @@ const addCommentToPost = async (postId, commentData) => {
     }
 }
 
+const updatePostLike = async (postId, newLikesCount) => {
+    try {
+        const postRef = doc(db, 'posts', postId);
+        await updateDoc(postRef, { likes: newLikesCount });
+    } catch (error) {
+        console.error('Erro ao atualizar o like do post:', error);
+        throw new Error('Erro ao atualizar o like do post');
+    }
+};
 
-export { getPostsByUserId, deletePostById, getPostById, updatePost, addCommentToPost };
+
+export { getPostsByUserId, deletePostById, getPostById, updatePost, addCommentToPost, updatePostLike };
