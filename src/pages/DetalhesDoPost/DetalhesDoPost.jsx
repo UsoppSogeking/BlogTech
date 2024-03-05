@@ -6,7 +6,7 @@ import { getPostById, } from '../../services/postService';
 import ReactMarkdown from 'react-markdown';
 import CommentForm from '../../components/CommentForm';
 import { db } from '../../firebase';
-import { collection, deleteDoc, doc, getDocs, orderBy, query, updateDoc, where } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, updateDoc, where } from 'firebase/firestore';
 import { getUserPhotoUrl } from '../../utils/userUtils';
 import { AiOutlineEdit, AiOutlineDelete, AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { useAuth } from '../../context/AuthContext';
@@ -41,11 +41,37 @@ const DetalhesDoPost = () => {
         fetchPost();
     }, [postId]);
 
-    useEffect(() => {
-        if (post && user) {
-            setLikesCount(post.likes);
+    const updateLikeStatusDatabase = async (postId, likedStatus, newLikesCount) => {
+        try {
+            //Atualiza o estado do like e o contador de likes no banco de dados
+            await updateDoc(doc(db, 'posts', postId), {
+                liked: likedStatus,
+                likes: newLikesCount
+            });
+        } catch (err) {
+            console.error('Erro ao atualizar o like no banco de dados:', err);
         }
-    }, [post]);
+    }
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                //Obtenha o documento do post do banco de dados firestore
+                const postDoc = await getDoc(doc(db, 'posts', postId));
+                if (postDoc.exists()) {
+                    const postData = postDoc.data();
+
+                    //Define o estado inicial do botão de likes e contador de likes
+                    setLiked(postData.liked || false);
+                    setLikesCount(postData.likes || 0);
+                }
+            } catch (err) {
+                console.error('Erro ao buscar dados do post:', err);
+            }
+        }
+        //Carrega os dados do post ao montar o compoente ou quando postId mudar
+        fetchData();
+    }, [postId]);
 
     const handleLikeClick = async () => {
         if (!user) {
@@ -53,23 +79,27 @@ const DetalhesDoPost = () => {
         }
 
         try {
-            if (liked) {
-                // Se o usuário já curtiu, decrementar o contador
-                setLikesCount(prevCount => prevCount - 1);
-            } else {
-                // Se o usuário ainda não curtiu, incrementar o contador
-                setLikesCount(prevCount => prevCount + 1);
+            // Obtém o documento do post do banco de dados Firestore
+            const postDoc = await getDoc(doc(db, 'posts', postId));
+            if (postDoc.exists()) {
+                const postData = postDoc.data();
+                // Verifica o estado atual do like no documento do post
+                const likedStatus = postData.liked > 0;
+                //Calcula o novo contador de likes com base no estado atual do like
+                let newLikesCount;
+                if (likedStatus) {
+                    newLikesCount = liked ? postData.likes - 1 : postData.likes + 1;
+                } else {
+                    newLikesCount = 1;
+                }
+                //Atualiza o estado do like e o contador de likes no banco de dados
+                await updateLikeStatusDatabase(postId, !likedStatus, newLikesCount);
+                // Atualizar o estado do botão de like e do contador de likes no componente
+                setLikesCount(newLikesCount);
+                setLiked(!likedStatus);
             }
-
-            // Atualizar o estado liked para o oposto do estado atual
-            setLiked(!liked);
-
-            // Atualizar o banco de dados
-            await updateDoc(doc(db, 'posts', postId), {
-                likes: liked ? likesCount - 1 : likesCount + 1
-            });
-        } catch (error) {
-            console.error('Erro ao atualizar o like:', error);
+        } catch (err) {
+            console.error('Erro ao atualizar o like:', err);
         }
     }
 
