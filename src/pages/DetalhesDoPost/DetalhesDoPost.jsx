@@ -18,6 +18,7 @@ const DetalhesDoPost = () => {
     const { user } = useAuth();
     const { loading: profileLoading, userData: profileData } = useProfile();
     const [post, setPost] = useState(null);
+    const [creator, setCreator] = useState(null);
     const [comments, setComments] = useState([]);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -32,6 +33,14 @@ const DetalhesDoPost = () => {
                 const fetchedPost = await getPostById(postId);
                 setPost(fetchedPost);
                 setLoading(false);
+
+                const userDoc = await getDoc(doc(db, 'users', fetchedPost.userId));
+                if (userDoc.exists()) {
+                    const userData = userDoc.data();
+                    setCreator(userData); // Define os dados do criador do post
+                } else {
+                    console.error('Dados do usuário não encontrados para o criador do post');
+                }
             } catch (error) {
                 console.error('Erro ao buscar detalhes do post:', error);
                 setError(error.message);
@@ -178,11 +187,11 @@ const DetalhesDoPost = () => {
         <div className="detalhes-do-post d-flex flex-column align-items-center" style={{ maxWidth: "800px", margin: "40px auto", padding: '0 20px' }}>
             <div className="criador-do-post d-flex align-items-start justify-content-start w-100 mb-4">
                 <div className="foto-criador me-3">
-                    <Image src={profileData?.photoUrl} alt='Foto de perfil do criador' roundedCircle style={{ width: "80px", height: "80px" }} />
+                    <Image src={creator?.photoUrl} alt='Foto de perfil do criador' roundedCircle style={{ width: "80px", height: "80px" }} />
                 </div>
                 <div className="info-criador text-left">
-                    <h3 style={{ marginBottom: "5px" }}>{profileData?.name}</h3>
-                    <p style={{ fontSize: "14px", marginBottom: "10px" }}>{profileData?.bio}</p>
+                    <h3 style={{ marginBottom: "5px" }}>{creator?.name}</h3>
+                    <p style={{ fontSize: "14px", marginBottom: "10px" }}>{creator?.bio}</p>
                 </div>
             </div>
             <div className="detalhes-do-post text-center" style={{ marginTop: '20px' }}>

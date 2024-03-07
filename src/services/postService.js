@@ -33,13 +33,19 @@ const getPostById = async (postId) => {
     try {
         const postDoc = await getDoc(doc(db, 'posts', postId));
         if (postDoc.exists()) {
-            return { id: postDoc.id, ...postDoc.data() }
+            const postData = postDoc.data();
+            // Aqui você precisa buscar os dados do criador do post
+            // e adicioná-los ao objeto postData
+            const userDoc = await getDoc(doc(db, 'users', postData.userId));
+            const userData = userDoc.data();
+            postData.creatorData = userData;
+            return postData;
         } else {
-            throw new Error('Post não encontrado');
+            throw new Error('Post not found');
         }
     } catch (error) {
-        console.error('Erro ao buscar o post:', error);
-        throw new Error('Erro ao buscar o post');
+        console.error('Error fetching post by ID:', error);
+        throw error;
     }
 }
 
