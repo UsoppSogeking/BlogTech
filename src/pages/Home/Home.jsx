@@ -61,10 +61,10 @@ const Home = () => {
                                     <div className="d-flex align-items-center mb-2">
                                         <Image
                                             src={post.user.photoUrl}
-                                            className="img-thumbnail me-3"
+                                            className="me-3"
                                             alt="User Thumbnail"
                                             roundedCircle
-                                            style={{ width: '48px', height: '48px' }}
+                                            style={{ width: '40px', height: '40px' }}
                                         />
                                         <div>
                                             <h5 className="card-title">{post.user.name}</h5>
