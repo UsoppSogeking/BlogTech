@@ -177,9 +177,6 @@ const Perfil = () => {
                                 <Form.Label>Conteúdo</Form.Label>
                                 <Form.Control as="textarea" rows={3} placeholder="Conteúdo do post" value={editedPost.content} onChange={(e) => setEditedPost({ ...editedPost, content: e.target.value })} />
                             </Form.Group>
-                            {/* <Button variant="primary" type="submit">
-                                Salvar Alterações
-                            </Button> */}
                         </Form>
                     ) : (
                         <p>Tem certeza de que deseja excluir este post?</p>

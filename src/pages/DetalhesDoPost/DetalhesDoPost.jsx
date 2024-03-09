@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import { Image } from 'react-bootstrap';
 import useProfile from '../../hooks/useProfile';
 import { getPostById, } from '../../services/postService';
 import ReactMarkdown from 'react-markdown';
 import CommentForm from '../../components/CommentForm';
 import { db } from '../../firebase';
-import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, onSnapshot, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import { collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { getUserPhotoUrl } from '../../utils/userUtils';
 import { AiOutlineEdit, AiOutlineDelete, AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { useAuth } from '../../context/AuthContext';
@@ -26,6 +26,8 @@ const DetalhesDoPost = () => {
     const [likesCount, setLikesCount] = useState(0);
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editingCommentText, setEditingCommentText] = useState('');
+
+    const navigate = useNavigate()
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -55,19 +57,22 @@ const DetalhesDoPost = () => {
             try {
                 const postRef = doc(db, 'posts', postId);
                 const postSnap = await getDoc(postRef);
-    
+
                 if (postSnap.exists()) {
                     const postData = postSnap.data();
                     setLikesCount(postData.likes || 0);
-    
-                    const likesCollectionRef = collection(db, 'posts', postId, 'likes');
-                    const userLikeRef = doc(likesCollectionRef, user.uid);
-                    const userLikeSnap = await getDoc(userLikeRef);
-    
-                    if (userLikeSnap.exists()) {
-                        setLiked(true);
-                    } else {
-                        setLiked(false);
+
+                    // Verifica se o usuário está autenticado antes de acessar o UID
+                    if (user && user.uid) {
+                        const likesCollectionRef = collection(db, 'posts', postId, 'likes');
+                        const userLikeRef = doc(likesCollectionRef, user.uid);
+                        const userLikeSnap = await getDoc(userLikeRef);
+
+                        if (userLikeSnap.exists()) {
+                            setLiked(true);
+                        } else {
+                            setLiked(false);
+                        }
                     }
                 } else {
                     console.error('Documento do post não encontrado');
@@ -76,26 +81,26 @@ const DetalhesDoPost = () => {
                 console.error('Erro ao buscar detalhes do post:', error);
             }
         };
-    
+
         fetchData();
     }, [postId, user]);
-    
+
     const handleLikeClick = async () => {
         if (!user) {
-            return;
+            navigate("/login");
         }
-    
+
         try {
             const likesCollectionRef = collection(db, 'posts', postId, 'likes');
             const userLikeRef = doc(likesCollectionRef, user.uid);
             const userLikeSnap = await getDoc(userLikeRef);
-    
+
             if (!userLikeSnap.exists()) {
                 // Se o usuário ainda não deu like, adicionar o like
                 await setDoc(userLikeRef, { timestamp: new Date().toISOString() });
-    
+
                 setLiked(true); // Atualizar o estado do botão
-    
+
                 setLikesCount(prevCount => {
                     const newCount = prevCount + 1;
                     // Incrementar o contador de likes no Firestore
@@ -107,9 +112,9 @@ const DetalhesDoPost = () => {
             } else {
                 // Se o usuário já deu like, remover o like
                 await deleteDoc(userLikeRef);
-    
+
                 setLiked(false); // Atualizar o estado do botão
-    
+
                 setLikesCount(prevCount => {
                     const newCount = Math.max(prevCount - 1, 0);
                     // Decrementar o contador de likes no Firestore
@@ -123,7 +128,7 @@ const DetalhesDoPost = () => {
             console.error('Erro ao atualizar o like:', error);
         }
     };
-    
+
 
     useEffect(() => {
         const fetchComments = async () => {
@@ -238,58 +243,55 @@ const DetalhesDoPost = () => {
                                 <Image src={comment.userPhoto} alt="Foto de perfil do usuário" roundedCircle style={{ width: "40px", height: "40px" }} />
                                 <span className="ms-2">{comment.userName}</span>
                                 {/* ícones de edição e exclusão */}
-                                {editingCommentId === comment.id ? (
-                                    <>
-                                        <input
-                                            className="comment-edit-input"
-                                            type="text"
-                                            value={editingCommentText}
-                                            onChange={(e) => setEditingCommentText(e.target.value)}
-                                        />
-                                        <button className="comment-edit-button" onClick={() => handleEditComment(comment.id, editingCommentText)}>Salvar</button>
-                                    </>
-                                ) : (
-                                    <>
-                                        <div className="ml-auto comment-icons"> {/* Adicionamos a classe 'ml-auto' para alinhar os ícones à direita */}
-                                            {/* Verificar se o usuário é o autor do post ou o autor do comentário */}
-                                            {(user.uid === profileData.uid || user.uid === comment.userId) && (
-                                                <button className="btn btn-outline-primary me-2 edit-btn">
-                                                    <AiOutlineEdit
-                                                        className="edit-icon"
-                                                        onClick={() => {
-                                                            setEditingCommentId(comment.id);
-                                                            setEditingCommentText(comment.text);
-                                                        }}
-                                                        size={24}
-                                                        style={{ color: '#007bff' }} // Adicione esta linha para definir a cor e o tamanho do ícone de edição
-                                                    />
-                                                </button>
+                                {user && (
+                                    <div className="ml-auto comment-icons"> {/* Adicionamos a classe 'ml-auto' para alinhar os ícones à direita */}
+                                        {/* Verificar se o usuário é o autor do post ou o autor do comentário */}
+                                        {(user.uid === profileData.uid || user.uid === comment.userId) && (
+                                            <button className="btn btn-outline-primary me-2 edit-btn">
+                                                <AiOutlineEdit
+                                                    className="edit-icon"
+                                                    onClick={() => {
+                                                        setEditingCommentId(comment.id);
+                                                        setEditingCommentText(comment.text);
+                                                    }}
+                                                    size={24}
+                                                    style={{ color: '#007bff' }} // Adicione esta linha para definir a cor e o tamanho do ícone de edição
+                                                />
+                                            </button>
+                                        )}
 
-                                            )}
-                                            {/* Verificar se o usuário é o autor do post ou o autor do comentário */}
-                                            {(user.uid === profileData.uid || user.uid === comment.userId || profileData.uid === user.uid) && (
-                                                <button className="btn btn-outline-danger delete-btn">
-                                                    <AiOutlineDelete
-                                                        className="delete-icon"
-                                                        onClick={() => handleDeleteComment(comment.id)}
-                                                        size={24}
-                                                        style={{ color: '#ff6347' }} // Adicione esta linha para definir a cor e o tamanho do ícone de exclusão
-                                                    />
-                                                </button>
-                                            )}
-                                        </div>
-                                    </>
+                                        {/* Verificar se o usuário é o autor do post ou o autor do comentário */}
+                                        {(user.uid === profileData.uid || user.uid === comment.userId || profileData.uid === user.uid) && (
+                                            <button className="btn btn-outline-danger delete-btn">
+                                                <AiOutlineDelete
+                                                    className="delete-icon"
+                                                    onClick={() => handleDeleteComment(comment.id)}
+                                                    size={24}
+                                                    style={{ color: '#ff6347' }} // Adicione esta linha para definir a cor e o tamanho do ícone de exclusão
+                                                />
+                                            </button>
+                                        )}
+                                    </div>
                                 )}
                             </div>
-                            <div className={`comment-content ${editingCommentId === comment.id && 'edit-mode'}`}>
-                                {editingCommentId === comment.id ? (
-                                    <p>Modo de edição...</p>
-                                ) : (
+                            {editingCommentId === comment.id ? (
+                                <div className="edit-comment-form">
+                                    <input
+                                        className="comment-edit-input"
+                                        type="text"
+                                        value={editingCommentText}
+                                        onChange={(e) => setEditingCommentText(e.target.value)}
+                                    />
+                                    <button className="comment-edit-button" onClick={() => handleEditComment(comment.id, editingCommentText)}>Salvar</button>
+                                </div>
+                            ) : (
+                                <div className="comment-content">
                                     <p>{comment.text}</p>
-                                )}
-                            </div>
+                                </div>
+                            )}
                         </li>
                     ))}
+
                 </ul>
             </div>
         </div>
