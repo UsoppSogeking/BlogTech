@@ -4,18 +4,40 @@
     margin-bottom: 20px;
 }
 
-.like-button.active {
+.like-button.active span {
     color: #fff;
 }
 
-.comments-section {
-    width: 100%;
-    margin-top: 10px;
+.like-button:hover span {
+    color: #fff;
 }
 
 .like-button:hover svg {
     fill: #fff;
     transition: fill 0.3s;
+}
+
+.favorite-button {
+    background-color: transparent;
+    transition: background-color 0.3s;
+}
+
+.favorite-button.active span{
+    color: #fff;
+}
+
+.favorite-button:hover span {
+    color: #fff;
+}
+
+.favorite-button:hover svg {
+    fill: #fff;
+    transition: fill 0.3s;
+}
+
+.comments-section {
+    width: 100%;
+    margin-top: 10px;
 }
 
 .comments-section .comment {

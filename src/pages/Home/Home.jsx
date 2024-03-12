@@ -5,8 +5,11 @@ import { useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { getUserName, getUserPhotoUrl } from '../../utils/userUtils';
 import { Image } from 'react-bootstrap';
-import { IoBookmarkOutline } from 'react-icons/io5';
+import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
+import useFavorites from '../../hooks/useFavorites';
+
+import './Home.css';
 
 const Home = () => {
     const [posts, setPosts] = useState([]);
@@ -53,10 +56,10 @@ const Home = () => {
 
             <div className="container">
                 <h2 className="my-4">Latest Posts</h2>
-                <div className="row">
+                <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                     {posts.map((post) => (
-                        <div key={post.id} className="col-md-6" onClick={() => handlePostClick(post.id)}>
-                            <div className="card mb-3" style={{cursor: 'pointer'}}>
+                        <div key={post.id} className="col">
+                            <div className="card h-100" style={{ cursor: 'pointer' }}>
                                 <div className="card-body">
                                     <div className="d-flex align-items-center mb-2">
                                         <Image
@@ -76,22 +79,46 @@ const Home = () => {
                                         <small className="text-muted">
                                             {formatDistanceToNow(new Date(post.createdAt.toDate()))} ago
                                         </small>
-                                        <span className="badge bg-secondary ms-2">
-                                            {post.interests[0]}
-                                        </span>
-                                        <button type="button" className="btn btn-outline-warning btn-sm float-end">
-                                            <IoBookmarkOutline />
-                                        </button>
+                                        {post.interests.slice(0, 2).map((interest, index) => (
+                                            <span key={index} className="badge bg-secondary ms-2">{interest}</span>
+                                        ))}
                                     </p>
+                                </div>
+                                <div className="card-footer">
+                                    <button type="button" className="btn btn-outline-warning me-2" onClick={() => handlePostClick(post.id)}>
+                                        Read More
+                                    </button>
+                                    <FavoriteButton postId={post.id} />
                                 </div>
                             </div>
                         </div>
                     ))}
                 </div>
             </div>
-
         </>
+    )
+}
 
+const FavoriteButton = ({ postId }) => {
+    const { isFavorite, toggleFavorite } = useFavorites(postId);
+
+    return (
+        <button type='button' className={`btn btn-outline-danger btn-sm float-end favorite-button ${isFavorite ? 'active' : ''}`}  onClick={(e) => {
+            e.stopPropagation();
+            toggleFavorite();
+        }}>
+            {isFavorite ? (
+                <>
+                    <AiFillHeart style={{color: '#fff', marginRight: '10px'}} />
+                    <span>Remove from favorites</span>
+                </>
+            ) : (
+                <>
+                    <AiOutlineHeart style={{ color: '#dc3545', marginRight: "10px" }} />
+                    <span>Add to favorites</span>
+                </>
+            )}
+        </button>
     )
 }
 

@@ -1,0 +1,17 @@
+.favorite-button {
+    background-color: transparent;
+    transition: background-color 0.3s;
+}
+
+.favorite-button.active span{
+    color: #fff;
+}
+
+.favorite-button:hover span {
+    color: #fff;
+}
+
+.favorite-button:hover svg {
+    fill: #fff;
+    transition: fill 0.3s;
+}

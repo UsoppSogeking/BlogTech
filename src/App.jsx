@@ -13,6 +13,7 @@ import { RegisterProvider } from './context/RegisterContext'
 
 import './App.css'
 import DetalhesDoPost from './pages/DetalhesDoPost/DetalhesDoPost'
+import Favorites from './pages/Favorites/Favorites'
 
 
 
@@ -28,6 +29,7 @@ function App() {
             <Routes>
               <Route path='/BlogTech' element={<Home />} />
               <Route path='/perfil' element={<Perfil />} />
+              <Route path='/favorites' element={<Favorites />} />
               <Route path='/register' element={<Register />} />
               <Route path='/login' element={<Login />} />
               <Route path='/settings' element={<AccountSettings />} />

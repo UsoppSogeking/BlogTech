@@ -20,6 +20,7 @@ function Navigation() {
                         {user ? (
                             <>
                                 <Nav.Link as={NavLink} to="/perfil">Perfil</Nav.Link>
+                                <Nav.Link as={NavLink} to="/favorites">Favoritos</Nav.Link>
                                 <NavDropdown title="Sair" id="basic-nav-dropdown">
                                     <NavDropdown.Item onClick={logout}>Encerrar Sessão</NavDropdown.Item>
                                     <NavDropdown.Item as={NavLink} to="/settings">Conta</NavDropdown.Item>

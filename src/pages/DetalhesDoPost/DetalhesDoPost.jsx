@@ -6,12 +6,13 @@ import { getPostById, } from '../../services/postService';
 import ReactMarkdown from 'react-markdown';
 import CommentForm from '../../components/CommentForm';
 import { db } from '../../firebase';
-import { collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore';
+import { arrayRemove, arrayUnion, collection, deleteDoc, doc, getDoc, getDocs, orderBy, query, setDoc, updateDoc, where } from 'firebase/firestore';
 import { getUserPhotoUrl } from '../../utils/userUtils';
-import { AiOutlineEdit, AiOutlineDelete, AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
+import { AiOutlineEdit, AiOutlineDelete, AiOutlineHeart, AiFillHeart, AiOutlineLike, AiFillLike } from 'react-icons/ai';
 import { useAuth } from '../../context/AuthContext';
 
 import './DetalhesDoPost.css';
+import { IoBookmarkOutline } from 'react-icons/io5';
 
 const DetalhesDoPost = () => {
     const { postId } = useParams();
@@ -26,6 +27,7 @@ const DetalhesDoPost = () => {
     const [likesCount, setLikesCount] = useState(0);
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editingCommentText, setEditingCommentText] = useState('');
+    const [isFavorite, setIsFavorite] = useState(false);
 
     const navigate = useNavigate()
 
@@ -129,6 +131,48 @@ const DetalhesDoPost = () => {
         }
     };
 
+    useEffect(() => {
+        const checkFavorite = async () => {
+            if (user && user.uid) {
+                const userRef = doc(db, 'users', user.uid);
+                try {
+                    const userSnap = await getDoc(userRef);
+                    if (userSnap.exists()) {
+                        const userData = userSnap.data();
+                        setIsFavorite(userData.favoritePosts.includes(postId));
+                    }
+                } catch (error) {
+                    console.error('Erro ao verificar favoritos:', error);
+                }
+            }
+        };
+        checkFavorite();
+    }, [user, postId]);
+
+    const handleFavoriteClick = async () => {
+        if (!user) {
+            navigate("/login");
+            return;
+        }
+
+        try {
+            const userRef = doc(db, 'users', user.uid);
+            if (isFavorite) {
+                await updateDoc(userRef, {
+                    favoritePosts: arrayRemove(postId)
+                });
+                console.log('Post removido dos favoritos:', postId);
+            } else {
+                await updateDoc(userRef, {
+                    favoritePosts: arrayUnion(postId)
+                });
+                console.log('Post adicionado aos favoritos:', postId);
+            }
+            setIsFavorite(!isFavorite);
+        } catch (error) {
+            console.error('Erro ao atualizar favoritos:', error);
+        }
+    };
 
     useEffect(() => {
         const fetchComments = async () => {
@@ -219,18 +263,38 @@ const DetalhesDoPost = () => {
                 <div className="content-container" style={{ textAlign: "justify" }}>
                     <ReactMarkdown>{post.content}</ReactMarkdown>
                 </div>
-                <div className="like-section">
+                <div className="button-section d-flex justify-content-between align-items-center mb-4">
+                    {/* Botão de like ... */}
                     <button
-                        className={`btn btn-outline-danger d-flex align-items-center justify-content-start position-relative like-button ${liked ? 'active' : ''}`}
+                        className={`btn btn-outline-warning d-flex align-items-center justify-content-start position-relative like-button ${liked ? 'active' : ''}`}
                         onClick={handleLikeClick}
                     >
                         {liked ? (
-                            <AiFillHeart style={{ color: '#fff' }} />
+                            <AiFillLike style={{ color: '#fff' }} />
                         ) : (
-                            <AiOutlineHeart style={{ color: '#dc3545' }} />
+                            <AiOutlineLike style={{ color: '#ffc107' }} />
                         )}
                         <span className="ms-2">{likesCount}</span>
                     </button>
+                    {/* Botão de favorito */}
+                    <div className="favorite-section">
+                        <button
+                            className={`btn btn-outline-danger btn-sm float-end favorite-button ${isFavorite ? 'active' : ''}`}
+                            onClick={handleFavoriteClick}
+                        >
+                            {isFavorite ? (
+                                <>
+                                    <AiFillHeart style={{ color: '#fff', marginRight: "10px" }} />
+                                    <span>Remove from favorites</span>
+                                </>
+                            ) : (
+                                <>
+                                    <AiOutlineHeart style={{ color: '#dc3545', marginRight: "10px" }} />
+                                    <span>Add to favorites</span>
+                                </>
+                            )}
+                        </button>
+                    </div>
                 </div>
                 <CommentForm postId={postId} userName={profileData?.name} updateComments={updateComments} />
             </div>
