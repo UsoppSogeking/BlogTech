@@ -5,7 +5,7 @@ import { useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
 import { getUserName, getUserPhotoUrl } from '../../utils/userUtils';
 import { Image } from 'react-bootstrap';
-import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai';
+import { AiOutlineHeart, AiFillHeart, AiOutlineRead } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
 import useFavorites from '../../hooks/useFavorites';
 
@@ -85,8 +85,8 @@ const Home = () => {
                                     </p>
                                 </div>
                                 <div className="card-footer">
-                                    <button type="button" className="btn btn-outline-warning me-2" onClick={() => handlePostClick(post.id)}>
-                                        Read More
+                                    <button type="button" className="btn btn-outline-warning me-2 read-button" onClick={() => handlePostClick(post.id)}>
+                                        <AiOutlineRead />
                                     </button>
                                     <FavoriteButton postId={post.id} />
                                 </div>
@@ -103,19 +103,19 @@ const FavoriteButton = ({ postId }) => {
     const { isFavorite, toggleFavorite } = useFavorites(postId);
 
     return (
-        <button type='button' className={`btn btn-outline-danger btn-sm float-end favorite-button ${isFavorite ? 'active' : ''}`}  onClick={(e) => {
+        <button title='Favorites' type='button' className={`btn btn-outline-danger btn-sm float-end favorite-button ${isFavorite ? 'active' : ''}`} onClick={(e) => {
             e.stopPropagation();
             toggleFavorite();
         }}>
             {isFavorite ? (
                 <>
-                    <AiFillHeart style={{color: '#fff', marginRight: '10px'}} />
-                    <span>Remove from favorites</span>
+                    <AiFillHeart style={{ color: '#fff' }} />
+                    {/* <span>Remove from favorites</span> */}
                 </>
             ) : (
                 <>
-                    <AiOutlineHeart style={{ color: '#dc3545', marginRight: "10px" }} />
-                    <span>Add to favorites</span>
+                    <AiOutlineHeart style={{ color: '#dc3545' }} />
+                    {/* <span>Add to favorites</span> */}
                 </>
             )}
         </button>

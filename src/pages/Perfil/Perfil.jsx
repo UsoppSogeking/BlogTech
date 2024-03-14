@@ -7,6 +7,9 @@ import { useEffect, useState } from 'react';
 import useUserPosts from '../../hooks/useUserPosts';
 import { AiOutlineEdit, AiOutlineDelete } from 'react-icons/ai';
 import { useNavigate } from 'react-router-dom';
+import { collection, getDocs, query, where } from 'firebase/firestore';
+import { db } from '../../firebase';
+import { getFollowerCount } from '../../utils/userUtils';
 
 const Perfil = () => {
     const { user } = useAuth();
@@ -18,6 +21,8 @@ const Perfil = () => {
     const [showModal, setShowModal] = useState(false);
     const [postIdToDelete, setPostIdToDelete] = useState(null);
     const [editedPost, setEditedPost] = useState(null);
+    const [userPostCount, setUserPostCount] = useState(0);
+    const [followerCount, setFollowerCount] = useState(0);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -26,13 +31,52 @@ const Perfil = () => {
             setBio(userData.bio || "");
             setUserInterests(userData.userInterests || []);
         }
-    }, [userData])
+    }, [userData]);
+
 
     useEffect(() => {
         if (user) {
             fetchUserData();
         }
     }, [user, fetchUserData]);
+
+    useEffect(() => {
+        // Função assíncrona para obter a contagem de seguidores
+        const fetchFollowerCount = async () => {
+            try {
+                // Verifica se o usuário atual está autenticado
+                if (user) {
+                    // Chama a função getFollowerCount para obter a contagem de seguidores
+                    const count = await getFollowerCount(user.uid);
+                    // Atualiza o estado com a contagem de seguidores obtida
+                    setFollowerCount(count);
+                }
+            } catch (error) {
+                console.error('Erro ao obter contagem de seguidores:', error);
+            }
+        };
+
+        // Chama a função fetchFollowerCount ao montar o componente
+        fetchFollowerCount();
+
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [user]); // Executa o efeito sempre que currentUser mudar
+
+    useEffect(() => {
+        const fetchUserPostsCount = async () => {
+            try {
+                const q = query(collection(db, 'posts'), where('userId', '==', user.uid));
+                const snapshot = await getDocs(q);
+                setUserPostCount(snapshot.size);
+            } catch (err) {
+                console.error('Erro ao buscar o número de posts do usuário:', err);
+            }
+        }
+
+        if (user) {
+            fetchUserPostsCount();
+        }
+    }, [user]);
 
     const handleShowModal = (e, postId) => {
         e.stopPropagation();
@@ -48,6 +92,7 @@ const Perfil = () => {
     const handleConfirmDelete = async () => {
         if (postIdToDelete) {
             await handleDeletePost(postIdToDelete);
+            setUserPostCount(prevCount => prevCount - 1);
             handleCloseModal();
         }
     }
@@ -75,7 +120,7 @@ const Perfil = () => {
     const handleImageChange = (e) => {
         const file = e.target.files[0];
 
-        if(file.size > 1048487) {
+        if (file.size > 1048487) {
             alert("A imagem selecionada é muito grande. Por favor, selecione uma imagem menor.");
             return;
         }
@@ -117,13 +162,12 @@ const Perfil = () => {
                         )}
                     </div>
                     <div className="user-data">
-                        <h3>{name || "Nome do Usuário"}</h3>
+                        <h3 className="d-inline-block me-2">{name || "Nome do Usuário"}</h3>
                         <p>{bio || "Nenhuma bio disponível"}</p>
                         <p><strong>Interesses:</strong> {userInterests.length > 0 ? userInterests.join(', ') : "Nenhum interesse disponível"}</p>
                         <div className="user-stats d-flex flex-wrap">
-                            <p className="me-3"><strong>Seguindo:</strong> {userData?.following || 0}</p>
-                            <p className="me-3"><strong>Seguidores:</strong> {userData?.followers || 0}</p>
-                            <p><strong>Posts:</strong> {userData?.userPosts || 0}</p>
+                            <p><strong>Seguidores:</strong> {followerCount}</p>
+                            <p className="ms-3"><strong>Posts:</strong> {userPostCount}</p>
                         </div>
                     </div>
                 </div>

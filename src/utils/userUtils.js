@@ -1,5 +1,5 @@
 import { db } from '../firebase';
-import { doc, getDoc } from 'firebase/firestore';
+import { collection, doc, getDoc, getDocs, query, where } from 'firebase/firestore';
 
 const getUserName = async (userId) => {
     try {
@@ -29,4 +29,15 @@ const getUserPhotoUrl = async (userId) => {
     }
 }
 
-export { getUserName, getUserPhotoUrl };
+const getFollowerCount = async (userId) => {
+    try {
+        const followersQuery = query(collection(db, 'users'), where('following', 'array-contains', userId));
+        const followersSnapshot = await getDocs(followersQuery);
+        return followersSnapshot.size; // Retorna o número de documentos no snapshot, que é a contagem de seguidores
+    } catch (error) {
+        console.error('Erro ao obter contagem de seguidores:', error);
+        throw error; // Lança o erro para que ele possa ser tratado no componente que chama esta função
+    }
+};
+
+export { getUserName, getUserPhotoUrl, getFollowerCount };

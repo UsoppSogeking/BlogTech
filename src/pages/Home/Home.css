@@ -3,7 +3,7 @@
     transition: background-color 0.3s;
 }
 
-.favorite-button.active span{
+.favorite-button.active span {
     color: #fff;
 }
 
@@ -12,6 +12,16 @@
 }
 
 .favorite-button:hover svg {
+    fill: #fff;
+    transition: fill 0.3s;
+}
+
+.read-button {
+    background-color: transparent;
+    transition: background-color 0.3s;
+}
+
+.read-button:hover svg {
     fill: #fff;
     transition: fill 0.3s;
 }

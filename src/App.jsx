@@ -14,6 +14,7 @@ import { RegisterProvider } from './context/RegisterContext'
 import './App.css'
 import DetalhesDoPost from './pages/DetalhesDoPost/DetalhesDoPost'
 import Favorites from './pages/Favorites/Favorites'
+import UserDetails from './pages/UserDetails/UserDetails'
 
 
 
@@ -29,6 +30,7 @@ function App() {
             <Routes>
               <Route path='/BlogTech' element={<Home />} />
               <Route path='/perfil' element={<Perfil />} />
+              <Route path='/userdetails/:userId' element={<UserDetails />} />
               <Route path='/favorites' element={<Favorites />} />
               <Route path='/register' element={<Register />} />
               <Route path='/login' element={<Login />} />

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Image } from 'react-bootstrap';
+import { Button, Image } from 'react-bootstrap';
 import useProfile from '../../hooks/useProfile';
 import { getPostById, } from '../../services/postService';
 import ReactMarkdown from 'react-markdown';
@@ -12,7 +12,7 @@ import { AiOutlineEdit, AiOutlineDelete, AiOutlineHeart, AiFillHeart, AiOutlineL
 import { useAuth } from '../../context/AuthContext';
 
 import './DetalhesDoPost.css';
-import { IoBookmarkOutline } from 'react-icons/io5';
+import useFollow from '../../hooks/useFollow';
 
 const DetalhesDoPost = () => {
     const { postId } = useParams();
@@ -28,8 +28,11 @@ const DetalhesDoPost = () => {
     const [editingCommentId, setEditingCommentId] = useState(null);
     const [editingCommentText, setEditingCommentText] = useState('');
     const [isFavorite, setIsFavorite] = useState(false);
+    const { isFollowing, followUser } = useFollow(post?.userId);
+    const [followButtonText, setFollowButtonText] = useState('');
+    const isPostCreator = user && post && user.uid === post.userId;
 
-    const navigate = useNavigate()
+    const navigate = useNavigate();
 
     useEffect(() => {
         const fetchPost = async () => {
@@ -53,6 +56,11 @@ const DetalhesDoPost = () => {
         }
         fetchPost();
     }, [postId]);
+
+    useEffect(() => {
+        // Define o texto do botão com base no estado de isFollowing
+        setFollowButtonText(isFollowing ? 'Deixar de seguir' : 'Seguir');
+    }, [isFollowing]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -237,6 +245,14 @@ const DetalhesDoPost = () => {
         }
     }
 
+    const userDetailsNavigate = (userId) => {
+        if (userId === user.uid) {
+            navigate(`/perfil`);
+        } else {
+            navigate(`/userdetails/${userId}`);
+        }
+    }
+
     if (loading || profileLoading) {
         return <div>Carregando detalhes do post...</div>;
     }
@@ -248,14 +264,23 @@ const DetalhesDoPost = () => {
     return (
         <div className="detalhes-do-post d-flex flex-column align-items-center" style={{ maxWidth: "800px", margin: "40px auto", padding: '0 20px' }}>
             <div className="criador-do-post d-flex align-items-start justify-content-start w-100 mb-4">
-                <div className="foto-criador me-3">
+                <div className="foto-criador me-3" onClick={() => userDetailsNavigate(post?.userId)} style={{cursor: "pointer"}}>
                     <Image src={creator?.photoUrl} alt='Foto de perfil do criador' roundedCircle style={{ width: "80px", height: "80px" }} />
                 </div>
-                <div className="info-criador text-left">
+                <div className="info-criador text-left" onClick={() => userDetailsNavigate(post?.userId)} style={{cursor: "pointer"}}>
                     <h3 style={{ marginBottom: "5px" }}>{creator?.name}</h3>
                     <p style={{ fontSize: "14px", marginBottom: "10px" }}>{creator?.bio}</p>
                 </div>
+                {!isPostCreator && (
+                    <button
+                        className={`btn btn-outline-primary btn-sm float-end favorite-button ${isFollowing ? 'active' : ''}`}
+                        onClick={followUser}
+                    >
+                        {isFollowing ? 'unfollow' : 'follow'}
+                    </button>
+                )}
             </div>
+
             <div className="detalhes-do-post text-center" style={{ marginTop: '20px' }}>
                 <h2 style={{ textAlign: "center", marginBottom: "20px" }}>{post?.title}</h2>
                 <h5 style={{ marginBottom: "15px" }}>{post?.interests.join(', ')}</h5>
@@ -279,18 +304,19 @@ const DetalhesDoPost = () => {
                     {/* Botão de favorito */}
                     <div className="favorite-section">
                         <button
+                            title='Favorites'
                             className={`btn btn-outline-danger btn-sm float-end favorite-button ${isFavorite ? 'active' : ''}`}
                             onClick={handleFavoriteClick}
                         >
                             {isFavorite ? (
                                 <>
-                                    <AiFillHeart style={{ color: '#fff', marginRight: "10px" }} />
-                                    <span>Remove from favorites</span>
+                                    <AiFillHeart style={{ color: '#fff' }} />
+                                    {/* <span>Remove from favorites</span> */}
                                 </>
                             ) : (
                                 <>
-                                    <AiOutlineHeart style={{ color: '#dc3545', marginRight: "10px" }} />
-                                    <span>Add to favorites</span>
+                                    <AiOutlineHeart style={{ color: '#dc3545' }} />
+                                    {/* <span>Add to favorites</span> */}
                                 </>
                             )}
                         </button>
