@@ -24,4 +24,21 @@
 .read-button:hover svg {
     fill: #fff;
     transition: fill 0.3s;
+    color: #fff;
+}
+
+.card-hover {
+    transition: transform 0.3s ease-in-out;
+}
+
+.card-hover:hover {
+    transform: scale(1.05);
+}
+
+.btn-hover {
+    transition: background-color 0.3s ease-in-out;
+}
+
+.btn-hover:hover {
+    background-color: #ffc107;
 }

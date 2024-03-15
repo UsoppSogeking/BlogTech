@@ -7,6 +7,8 @@ import { Image } from 'react-bootstrap';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 
+import './Favorites.css';
+
 const Favorites = () => {
     const [favoritePosts, setFavoritesPosts] = useState([]);
     const navigate = useNavigate();
@@ -59,7 +61,7 @@ const Favorites = () => {
                 {favoritePosts.map((post, index) => (
                     <div key={index} className="col-md-6">
                         <div className="card mb-3" style={{ cursor: 'pointer' }} onClick={() => handlePostClick(post.id)}>
-                            <div className="card-body" >
+                            <div className="card-body">
                                 <div className="d-flex align-items-center mb-2">
                                     <Image src={post.user.photoUrl} className="me-3" alt="User Thumbnail" roundedCircle style={{ width: '40px', height: '40px' }} />
                                     <div>

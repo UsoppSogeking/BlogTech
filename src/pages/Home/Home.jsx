@@ -13,6 +13,7 @@ import './Home.css';
 
 const Home = () => {
     const [posts, setPosts] = useState([]);
+    const [isHovered, setIsHovered] = useState(false);
     const navigate = useNavigate();
 
     useEffect(() => {
@@ -59,7 +60,7 @@ const Home = () => {
                 <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                     {posts.map((post) => (
                         <div key={post.id} className="col">
-                            <div className="card h-100" style={{ cursor: 'pointer' }}>
+                            <div className={`card h-100 ${isHovered ? 'card-hover' : ''}`} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} style={{ cursor: 'pointer' }}>
                                 <div className="card-body">
                                     <div className="d-flex align-items-center mb-2">
                                         <Image
@@ -85,10 +86,12 @@ const Home = () => {
                                     </p>
                                 </div>
                                 <div className="card-footer">
-                                    <button type="button" className="btn btn-outline-warning me-2 read-button" onClick={() => handlePostClick(post.id)}>
-                                        <AiOutlineRead />
-                                    </button>
-                                    <FavoriteButton postId={post.id} />
+                                    <div className="d-flex justify-content-between align-items-center">
+                                        <button type="button" className="btn btn-outline-warning me-2 read-button flex-grow-1" onClick={() => handlePostClick(post.id)}>
+                                            <AiOutlineRead />
+                                        </button>
+                                        <FavoriteButton postId={post.id} className="btn btn-outline-warning flex-grow-1" />
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -96,7 +99,7 @@ const Home = () => {
                 </div>
             </div>
         </>
-    )
+    );
 }
 
 const FavoriteButton = ({ postId }) => {

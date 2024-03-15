@@ -264,10 +264,10 @@ const DetalhesDoPost = () => {
     return (
         <div className="detalhes-do-post d-flex flex-column align-items-center" style={{ maxWidth: "800px", margin: "40px auto", padding: '0 20px' }}>
             <div className="criador-do-post d-flex align-items-start justify-content-start w-100 mb-4">
-                <div className="foto-criador me-3" onClick={() => userDetailsNavigate(post?.userId)} style={{cursor: "pointer"}}>
+                <div className="foto-criador me-3" onClick={() => userDetailsNavigate(post?.userId)} style={{ cursor: "pointer" }}>
                     <Image src={creator?.photoUrl} alt='Foto de perfil do criador' roundedCircle style={{ width: "80px", height: "80px" }} />
                 </div>
-                <div className="info-criador text-left" onClick={() => userDetailsNavigate(post?.userId)} style={{cursor: "pointer"}}>
+                <div className="info-criador text-left" onClick={() => userDetailsNavigate(post?.userId)} style={{ cursor: "pointer" }}>
                     <h3 style={{ marginBottom: "5px" }}>{creator?.name}</h3>
                     <p style={{ fontSize: "14px", marginBottom: "10px" }}>{creator?.bio}</p>
                 </div>
@@ -288,11 +288,12 @@ const DetalhesDoPost = () => {
                 <div className="content-container" style={{ textAlign: "justify" }}>
                     <ReactMarkdown>{post.content}</ReactMarkdown>
                 </div>
-                <div className="button-section d-flex justify-content-between align-items-center mb-4">
+                <div className="button-section d-flex align-items-center mb-4">
                     {/* Botão de like ... */}
                     <button
                         className={`btn btn-outline-warning d-flex align-items-center justify-content-start position-relative like-button ${liked ? 'active' : ''}`}
                         onClick={handleLikeClick}
+                        style={{ marginRight: '5px', marginBottom: '5px' }} // Adicionando margem à direita e inferior
                     >
                         {liked ? (
                             <AiFillLike style={{ color: '#fff' }} />
@@ -302,25 +303,24 @@ const DetalhesDoPost = () => {
                         <span className="ms-2">{likesCount}</span>
                     </button>
                     {/* Botão de favorito */}
-                    <div className="favorite-section">
-                        <button
-                            title='Favorites'
-                            className={`btn btn-outline-danger btn-sm float-end favorite-button ${isFavorite ? 'active' : ''}`}
-                            onClick={handleFavoriteClick}
-                        >
-                            {isFavorite ? (
-                                <>
-                                    <AiFillHeart style={{ color: '#fff' }} />
-                                    {/* <span>Remove from favorites</span> */}
-                                </>
-                            ) : (
-                                <>
-                                    <AiOutlineHeart style={{ color: '#dc3545' }} />
-                                    {/* <span>Add to favorites</span> */}
-                                </>
-                            )}
-                        </button>
-                    </div>
+                    <button
+                        title='Favorites'
+                        className={`btn btn-outline-danger btn-sm favorite-button ${isFavorite ? 'active' : ''}`}
+                        onClick={handleFavoriteClick}
+                        style={{ padding: '7px', verticalAlign: 'top', marginBottom: '5px' }} // Ajustando o padding para igualar a altura
+                    >
+                        {isFavorite ? (
+                            <>
+                                <AiFillHeart style={{ color: '#fff' }} />
+                                {/* <span>Remove from favorites</span> */}
+                            </>
+                        ) : (
+                            <>
+                                <AiOutlineHeart style={{ color: '#dc3545' }} />
+                                {/* <span>Add to favorites</span> */}
+                            </>
+                        )}
+                    </button>
                 </div>
                 <CommentForm postId={postId} userName={profileData?.name} updateComments={updateComments} />
             </div>
