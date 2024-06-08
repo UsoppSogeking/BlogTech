@@ -12,11 +12,11 @@ function Navigation() {
     return (
         <Navbar expand="lg" className="bg-body-tertiary">
             <Container>
-                <Navbar.Brand as={NavLink} to="/BlogTech">Blog-Tech</Navbar.Brand>
+                <Navbar.Brand as={NavLink} to="/">Blog-Tech</Navbar.Brand>
                 <Navbar.Toggle aria-controls="basic-navbar-nav" />
                 <Navbar.Collapse id="basic-navbar-nav">
                     <Nav className="me-auto">
-                        <Nav.Link as={NavLink} to="/BlogTech">Home</Nav.Link>
+                        <Nav.Link as={NavLink} to="/">Home</Nav.Link>
                         {user ? (
                             <>
                                 <Nav.Link as={NavLink} to="/perfil">Perfil</Nav.Link>
