@@ -61,7 +61,7 @@ const Home = () => {
                     {posts.map((post) => (
                         <div key={post.id} className="col">
                             <div className={`card h-100 ${isHovered ? 'card-hover' : ''}`} onMouseEnter={() => setIsHovered(true)} onMouseLeave={() => setIsHovered(false)} style={{ cursor: 'pointer' }}>
-                                <div className="card-body">
+                                <div className="card-body d-flex flex-column">
                                     <div className="d-flex align-items-center mb-2">
                                         <Image
                                             src={post.user.photoUrl}
@@ -75,8 +75,8 @@ const Home = () => {
                                         </div>
                                     </div>
                                     <h5 className="card-title">{post.title}</h5>
-                                    <p className="card-text">{post.content.slice(0, 100)}</p>
-                                    <p className="card-text">
+                                    <p className="card-text flex-grow-1">{post.content.slice(0, 100)}</p>
+                                    <p className="card-text mt-auto">
                                         <small className="text-muted">
                                             {formatDistanceToNow(new Date(post.createdAt.toDate()))} ago
                                         </small>
