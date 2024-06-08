@@ -1,7 +1,7 @@
 import { onAuthStateChanged, signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { createContext, useContext, useEffect, useState } from "react";
 import { auth } from "../firebase";
-import { useNavigate } from "react-router-dom";
+//import { useNavigate } from "react-router-dom";
 
 //Criar o contexto de autenticação
 const AuthContext = createContext();
@@ -12,7 +12,7 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const navigate = useNavigate();
+    //const navigate = useNavigate();
 
     useEffect(() => {
         const unsubscribe = onAuthStateChanged(auth, (user) => {
@@ -29,7 +29,7 @@ export const AuthProvider = ({ children }) => {
         setError(null);
         try {
             await signInWithEmailAndPassword(auth, email, password);
-            navigate("/BlogTech");
+            //navigate("/BlogTech");
         } catch (error) {
             setError("Usuário ou senha inválidos.");
         }
@@ -43,7 +43,7 @@ export const AuthProvider = ({ children }) => {
         try {
             await signOut(auth);
             setUser(null);
-            navigate("/login")
+            //navigate("/login");
         } catch (error) {
             setError(error.message);
         }
