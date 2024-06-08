@@ -25,12 +25,12 @@ function App() {
       <BrowserRouter>
         <Navigation />
         <Routes>
-          <Route path='/BlogTech' element={<Home />} />
+          <Route path='/' element={<Home />} />
           <Route path='/perfil' element={user ? <Perfil /> : <Navigate to='/login' />} />
           <Route path='/userdetails/:userId' element={user ? <UserDetails /> : <Navigate to='/login' />} />
           <Route path='/favorites' element={user ? <Favorites /> : <Navigate to='/login' />} />
-          <Route path='/register' element={user ? <Navigate to='/BlogTech' /> : <Register />} />
-          <Route path='/login' element={user ? <Navigate to='/BlogTech' /> : <Login />} />
+          <Route path='/register' element={user ? <Navigate to='/' /> : <Register />} />
+          <Route path='/login' element={user ? <Navigate to='/' /> : <Login />} />
           <Route path='/settings' element={user ? <AccountSettings /> : <Navigate to='/login' />} />
           <Route path='/createpost' element={user ? <CreatePost /> : <Navigate to='/login' />} />
           <Route path='/postdetails/:postId' element={user ? <DetalhesDoPost /> : <Navigate to='/login' />} />
