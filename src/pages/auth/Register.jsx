@@ -4,7 +4,7 @@ import Form from 'react-bootstrap/Form';
 //hooks
 import { useState } from 'react';
 import { useRegister } from '../../context/RegisterContext';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 //css
 import './Auth.css';
@@ -17,7 +17,6 @@ function Register() {
     const [confirmPassword, setConfirmPassword] = useState("");
     const [error, setError] = useState("");
 
-    const navigate = useNavigate();
     const { loading, register } = useRegister();
 
     const isPasswordValid = (password) => {
@@ -46,8 +45,6 @@ function Register() {
             setEmail("");
             setPassword("");
             setConfirmPassword("");
-
-            navigate("/BlogTech");
         } catch (err) {
             console.error('Erro ao registrar:', err);
             setError(err.message);
