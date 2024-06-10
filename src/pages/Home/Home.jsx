@@ -3,6 +3,7 @@ import { db } from '../../firebase';
 import { useState } from 'react';
 import { useEffect } from 'react';
 import { formatDistanceToNow } from 'date-fns';
+import { ptBR } from 'date-fns/locale';
 import { getUserName, getUserPhotoUrl } from '../../utils/userUtils';
 import { Image } from 'react-bootstrap';
 import { AiOutlineHeart, AiFillHeart, AiOutlineRead } from 'react-icons/ai';
@@ -51,12 +52,12 @@ const Home = () => {
     return (
         <>
             <div className="banner p-5 text-center bg-dark text-white">
-                <h1 className="display-4">Stay curious.</h1>
-                <p className="lead">Discover stories, thinking, and expertise from writers on any topic.</p>
+                <h1 className="display-4">fique curioso</h1>
+                <p className="lead">Descubra histórias, pensamentos e conhecimentos de escritores sobre qualquer assunto.</p>
             </div>
 
             <div className="container">
-                <h2 className="my-4">Latest Posts</h2>
+                <h2 className="my-4">últimas postagens</h2>
                 <div className="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
                     {posts.map((post) => (
                         <div key={post.id} className="col">
@@ -78,7 +79,7 @@ const Home = () => {
                                     <p className="card-text flex-grow-1">{post.content.slice(0, 100)}</p>
                                     <p className="card-text mt-auto">
                                         <small className="text-muted">
-                                            {formatDistanceToNow(new Date(post.createdAt.toDate()))} ago
+                                            {formatDistanceToNow(new Date(post.createdAt.toDate()), { addSuffix: true, locale: ptBR })}
                                         </small>
                                         {post.interests.slice(0, 2).map((interest, index) => (
                                             <span key={index} className="badge bg-secondary ms-2">{interest}</span>

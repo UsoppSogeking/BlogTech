@@ -32,9 +32,6 @@ function Navigation() {
                             <NavDropdown title="Entrar" id="basic-nav-dropdown">
                                 <NavDropdown.Item as={NavLink} to="/register">Cadastre-se</NavDropdown.Item>
                                 <NavDropdown.Item as={NavLink} to="/login">Iniciar Sessão</NavDropdown.Item>
-                                <NavDropdown.Item href="#action/3.3">Something</NavDropdown.Item>
-                                <NavDropdown.Divider />
-                                <NavDropdown.Item href="#action/3.4">Separated link</NavDropdown.Item>
                             </NavDropdown>
                         )}
                     </Nav>

@@ -56,7 +56,7 @@ const Favorites = () => {
 
     return (
         <div className="container">
-            <h2 className="my-4">Favorite Posts</h2>
+            <h2 className="my-4">Postagens favoritas</h2>
             {favoritePosts.length > 0 ? (
                 <div className="row">
                     {favoritePosts.map((post, index) => (

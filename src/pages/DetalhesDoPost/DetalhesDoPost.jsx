@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Button, Image } from 'react-bootstrap';
+import { Image } from 'react-bootstrap';
 import useProfile from '../../hooks/useProfile';
 import { getPostById, } from '../../services/postService';
 import ReactMarkdown from 'react-markdown';
@@ -268,12 +268,12 @@ const DetalhesDoPost = () => {
                     <Image src={creator?.photoUrl} alt='Foto de perfil do criador' roundedCircle style={{ width: "80px", height: "80px" }} />
                 </div>
                 <div className="info-criador text-left" onClick={() => userDetailsNavigate(post?.userId)} style={{ cursor: "pointer" }}>
-                    <h3 style={{ marginBottom: "5px" }}>{creator?.name}</h3>
+                    <h3 style={{ marginBottom: "5px", marginRight: "8px" }}>{creator?.name}</h3>
                     <p style={{ fontSize: "14px", marginBottom: "10px" }}>{creator?.bio}</p>
                 </div>
                 {!isPostCreator && (
                     <button
-                        className={`btn btn-outline-primary btn-sm float-end favorite-button ${isFollowing ? 'active' : ''}`}
+                        className={`btn btn-outline-primary btn-sm float-end favorite-button mt-1 ${isFollowing ? 'active' : ''}`}
                         onClick={followUser}
                     >
                         {isFollowing ? 'unfollow' : 'follow'}

@@ -96,7 +96,7 @@ const UserDetails = () => {
                         <div className="user-data d-flex flex-column">
                             <div className="d-flex align-items-center mb-2">
                                 <h3 className="mb-0 me-2">{userDetails.name}</h3>
-                                <Button className={`btn btn-outline-primary btn-sm float-end favorite-button ${isFollowing ? 'active' : ''}`} onClick={followUser} style={{color: "#fff"}}>{followButtonText}</Button>
+                                <Button className={`btn btn-outline-primary btn-sm float-end favorite-button  ${isFollowing ? 'active' : ''}`} onClick={followUser} style={{color: "#fff"}}>{followButtonText}</Button>
                             </div>
                             <p className="mb-2">{userDetails.bio}</p>
                             <p className="mb-2"><strong>Interesses:</strong> {userDetails.userInterests.length > 0 ? userDetails.userInterests.join(', ') : "Nenhum interesse disponível"}</p>
